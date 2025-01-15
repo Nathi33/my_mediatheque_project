@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajout d'un membre</title>
+</head>
+<body>
+    <a href="/bibliothecaire">Retour au menu</a>
+    <p>Ajouter un membre !</p>
+    <form action="" method="post" novalidate>
+        {% csrf_token %}
+        {{creationMembre}}
+        <input type="submit" value="Enregistrer">
+    </form>
+</body>
+</html>

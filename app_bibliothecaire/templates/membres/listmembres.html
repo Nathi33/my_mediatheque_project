@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des Membres</title>
+    <style>
+        .message {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background-color: #4CAF50; /* Vert pour succès */
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 14px;
+            z-index: 1000; /* Pour que ça soit au-dessus d'autres éléments */
+        }
+    </style>
+</head>
+<body>
+    <a href="/bibliothecaire">Retour au menu</a>
+    <h1>Liste des membres</h1>
+
+    {% if messages %}
+        <div class="message">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <ul>
+        <!-- Boucle pour afficher tous les livres à travers la balise <li>  -->
+      {% for membre in membres %}
+      <li>
+          <p>Nom : {{ membre.name }}</p>
+          <p>Prénom : {{ membre.first_name }}</p>
+          <p>Email : {{ membre.email }}</p>
+          <p>Téléphone : {{ membre.phone }}</p>
+          <p>Créé le : {{ membre.creation_date|date:"d F Y" }} à {{membre.creation_date|date:"H:i"}}</p>
+          <button><a href="{% url 'updatemembre' id=membre.id %}"> Modifier</a></button>
+          <form action="{% url 'deletemembre' id=membre.id %}" method="POST" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit">Supprimer</button>
+            </form>
+      </li><br>
+      {% endfor %}
+    </ul>
+</body>
+</html>
