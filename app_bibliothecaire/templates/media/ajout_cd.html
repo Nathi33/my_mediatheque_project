@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajouter un CD</title>
+</head>
+<body>
+  <h2>Ajouter un CD</h2>
+  <form method="post">
+        {% csrf_token %}
+        {{ cdForm.as_p }}
+        <button type="submit">Ajouter le CD</button>
+  </form>
+  <a href="{% url 'app_bibliothecaire:ajoutmedia' %}">Retour</a>
+</body>
+</html>

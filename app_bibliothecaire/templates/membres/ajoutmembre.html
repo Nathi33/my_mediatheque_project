@@ -5,12 +5,12 @@
     <title>Ajout d'un membre</title>
 </head>
 <body>
-    <a href="/bibliothecaire">Retour au menu</a>
+    <a href="{% url 'app_bibliothecaire:home_bibliothecaire' %}">Retour au menu</a>
     <p>Ajouter un membre !</p>
-    <form action="" method="post" novalidate>
+    <form method="post">
         {% csrf_token %}
-        {{creationMembre}}
-        <input type="submit" value="Enregistrer">
+        {{creationMembre.as_p}}
+        <button type="submit">Enregistrer</button>
     </form>
 </body>
 </html>

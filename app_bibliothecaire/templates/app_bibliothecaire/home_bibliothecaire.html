@@ -7,11 +7,15 @@
 <body>
     <h1>Page d'accueil pour les bibliothécaires !</h1>
     <ul>
-        <li><a href="listmembres/">Liste des membres</a></li>
-        <li><a href="ajoutmembre/">Création d'un membre</a></li>
+        <li><a href="{% url 'app_bibliothecaire:listmembres' %}">Liste des membres</a></li>
+        <li><a href="{% url 'app_bibliothecaire:ajoutmembre' %}">Création d'un membre</a></li>
+    </ul>
+    <ul>
+        <li><a href="{% url 'app_bibliothecaire:listmedia' %}">Liste des médias</a></li>
+        <li><a href="{% url 'app_bibliothecaire:ajoutmedia' %}">Création d'un média</a></li>
     </ul>
     <button>
-      <a href="/">Retour au menu principal</a>
+      <a href="{% url 'home' %}">Retour au menu principal</a>
     </button>
 </body>
 </html>

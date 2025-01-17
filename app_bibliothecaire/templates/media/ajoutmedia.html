@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajout Media</title>
+    <style>
+        .message {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background-color: #4CAF50; /* Vert pour succès */
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 14px;
+            z-index: 1000; /* Pour que ça soit au-dessus d'autres éléments */
+        }
+    </style>
+</head>
+<body>
+    <button>
+      <a href="{% url 'app_bibliothecaire:home_bibliothecaire' %}">Retour au menu</a>
+    </button>
+    <button>
+      <a href="{% url 'app_bibliothecaire:listmedia' %}">Liste des médias</a>
+    </button>
+
+    <h2>Ajoutez un média !</h2>
+
+     {% if messages %}
+        <div class="message">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <p>Choisissez le type de média que vous souhaitez ajouter :</p>
+    <ul>
+        <li><a href="{% url 'app_bibliothecaire:ajout_livre' %}">Ajouter un Livre</a></li>
+        <li><a href="{% url 'app_bibliothecaire:ajout_dvd' %}">Ajouter un DVD</a></li>
+        <li><a href="{% url 'app_bibliothecaire:ajout_cd' %}">Ajouter un CD</a></li>
+        <li><a href="{% url 'app_bibliothecaire:ajout_plateau' %}">Ajouter un Plateau de Jeux</a></li>
+    </ul>
+
+</body>
+</html>

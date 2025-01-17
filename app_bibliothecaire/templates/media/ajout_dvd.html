@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>ajouter un DVD</title>
+</head>
+<body>
+    <h2>Ajouter un DVD</h2>
+   <!-- form ouvre un formulaire et post permet l'envoi de données sensibles car ne s'affichent pas dans l'URL -->
+    <form method="post">
+        <!-- requête spécifique à Django générant un token CSRF (=Cross-Site Request Forgery)
+         protégeant l'application contre des requêtes malveillantes et est obligatoire pour la requête POST -->
+        {% csrf_token %}
+        <!-- affiche le formulaire dvdForm et place chaque champ dans une balise <p> -->
+        {{ dvdForm.as_p }}
+        <button type="submit">Ajouter le DVD</button>
+    </form>
+    <!-- génère dynamiquement l'URL correspondant à une view Django en utilisant
+    son nom de route définit dans urls.py -->
+    <a href="{% url 'app_bibliothecaire:ajoutmedia' %}">Retour</a>
+</body>
+</html>

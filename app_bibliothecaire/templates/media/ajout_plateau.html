@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajouter un Plateau de Jeux</title>
+</head>
+<body>
+  <h2>Ajouter un Plateau de Jeux</h2>
+  <form method="post">
+        {% csrf_token %}
+        {{ plateauForm.as_p }}
+        <button type="submit">Ajouter le plateau de jeux</button>
+  </form>
+  <a href="{% url 'app_bibliothecaire:ajoutmedia' %}">Retour</a>
+</body>
+</html>

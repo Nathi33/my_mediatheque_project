@@ -5,11 +5,12 @@
     <title>Modification Membre</title>
 </head>
 <body>
-    <p>Modifier la fiche du membre!</p>
-    <form action="" method="post" novalidate>
+    <a href="{% url 'app_bibliothecaire:home_bibliothecaire' %}">Retour au menu</a>
+    <p>Modifier la fiche du membre !</p>
+    <form method="post">
         {% csrf_token %}
-        {{ updatemembre }}
-        <input type="submit" value="Enregistrer">
+        {{ updatemembre.as_p }}
+        <button type="submit">Enregistrer</button>
     </form>
 </body>
 </html>
