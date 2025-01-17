@@ -8,29 +8,33 @@
             position: fixed;
             top: 10px;
             right: 10px;
-            background-color: #4CAF50; /* Vert pour succès */
+            background-color: #4CAF50;
             color: white;
             padding: 10px 20px;
             border-radius: 5px;
             font-size: 14px;
-            z-index: 1000; /* Pour que ça soit au-dessus d'autres éléments */
+            z-index: 1000;
         }
     </style>
 </head>
 <body>
-    <a href="/bibliothecaire">Retour au menu</a>
+    <a href="{% url 'app_bibliothecaire:home_bibliothecaire' %}">Retour au menu</a>
     <h1>Liste des membres</h1>
 
+    <!-- Vérifie s'il y a des messages dans la file d'attente qui sont ajoutés via messages.success de Django -->
+    <!-- Si des messages sont présents, le bloc <div class="message" est exécuté -->
     {% if messages %}
         <div class="message">
+            <!-- Boucle parcourant tous les messages stockés dans la file d'attente -->
             {% for message in messages %}
                 <p>{{ message }}</p>
             {% endfor %}
         </div>
+    <!-- Fin de la condition, si plus de message présent dans la file d'attente, rien ne s'affiche -->
     {% endif %}
 
     <ul>
-        <!-- Boucle pour afficher tous les livres à travers la balise <li>  -->
+      <!-- Boucle pour afficher tous les membres à travers la balise <li>  -->
       {% for membre in membres %}
       <li>
           <p>Nom : {{ membre.name }}</p>
@@ -38,11 +42,11 @@
           <p>Email : {{ membre.email }}</p>
           <p>Téléphone : {{ membre.phone }}</p>
           <p>Créé le : {{ membre.creation_date|date:"d F Y" }} à {{membre.creation_date|date:"H:i"}}</p>
-          <button><a href="{% url 'updatemembre' id=membre.id %}"> Modifier</a></button>
-          <form action="{% url 'deletemembre' id=membre.id %}" method="POST" style="display:inline;">
+          <button><a href="{% url 'app_bibliothecaire:updatemembre' id=membre.id %}"> Modifier</a></button>
+          <form action="{% url 'app_bibliothecaire:deletemembre' id=membre.id %}" method="POST" style="display:inline;">
                 {% csrf_token %}
                 <button type="submit">Supprimer</button>
-            </form>
+          </form>
       </li><br>
       {% endfor %}
     </ul>

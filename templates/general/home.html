@@ -7,10 +7,10 @@
 <body>
     <h1>Bienvenue à la Médiathèque</h1>
     <button>
-      <a href="/bibliothecaire">Accès Bibliothécaire</a>
+      <a href="{% url 'app_bibliothecaire:home_bibliothecaire' %}">Accès Bibliothécaire</a>
     </button>
     <button>
-      <a href="/membre">Accès Membre</a>
+      <a href="{% url 'app_membre:home_membre' %}">Accès Membre</a>
     </button>
 </body>
 </html>

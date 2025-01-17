@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste Medias</title>
+</head>
+<body>
+    <a href="{% url 'app_bibliothecaire:home_bibliothecaire' %}">Retour au menu</a>
+    <h1>Liste des Médias</h1>
+
+    <h2>Livres</h2>
+    <ul>
+        {% for livre in livres %}
+        <li>
+          <p>Titre : {{ livre.name }}</p>
+          <p>Auteur : {{ livre.auteur }}</p>
+          <p>Nombre de pages : {{ livre.nb_pages }}</p>
+          <p>Disponible : {{ livre.disponibility }}</p>
+          <p> Emprunté par ...  le ... </p>
+      </li><br>
+      {% endfor %}
+    </ul>
+
+    <h2>DVD</h2>
+    <ul>
+        {% for dvd in dvds %}
+        <li>
+          <p>Titre : {{ dvd.name }}</p>
+          <p>Réalisateur : {{ dvd.auteur }}</p>
+          <p>Genre : {{ dvd.genre }}</p>
+          <p>Disponible : {{ dvd.disponibility }}</p>
+          <p> Emprunté par ...  le ... </p>
+      </li><br>
+      {% endfor %}
+    </ul>
+
+    <h2>CD</h2>
+    <ul>
+        {% for cd in cds %}
+        <li>
+          <p>Titre : {{ cd.name }}</p>
+          <p>Artiste : {{ cd.auteur }}</p>
+          <p>date de sortie : {{ cd.date_sortie }}</p>
+          <p>Disponible : {{ cd.disponibility }}</p>
+          <p> Emprunté par ...  le ... </p>
+      </li><br>
+      {% endfor %}
+    </ul>
+
+    <h2>Plateaux de Jeux</h2>
+    <ul>
+        {% for plateau in plateaux %}
+        <li>
+          <p>Nom du jeu : {{ plateau.name }}</p>
+          <p>Créateur : {{ plateau.auteur }}</p>
+          <p>Nombre de joueurs : de {{ plateau.nombre_joueurs_min }} à {{ plateau.nombre_joueurs_max}} joueurs</p>
+        </li><br>
+      {% endfor %}
+    </ul>
+</body>
+</html>
