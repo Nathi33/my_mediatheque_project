@@ -15,4 +15,6 @@ urlpatterns = [
     path('ajout_dvd/', views.ajout_dvd, name='ajout_dvd'),
     path('ajout_cd/', views.ajout_cd, name='ajout_cd'),
     path('ajout_plateau/', views.ajout_plateau, name='ajout_plateau'),
+    path('creer_emprunt/', views.creer_emprunt, name='creer_emprunt'),
+    path('deletemedia/<int:id>/', views.deletemedia, name='deletemedia'),
 ]

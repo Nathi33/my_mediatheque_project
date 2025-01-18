@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from app_bibliothecaire.models import Membre, Livre, Dvd, Cd, PlateauDeJeu
-from app_bibliothecaire.forms import Creationmembre, Updatemembre, LivreForm, DvdForm, CdForm, PlateauForm
+from app_bibliothecaire.models import Membre, Livre, Dvd, Cd, Plateau, Emprunt, Media
+from app_bibliothecaire.forms import Creationmembre, Updatemembre, LivreForm, DvdForm, CdForm, PlateauForm, EmpruntForm
 from django.contrib import messages
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 
 # Fonctionnalité : Menu principal
 def home_bibliothecaire(request):
-    return render(request, 'app_bibliothecaire/home_bibliothecaire.html')
+    return render(request, 'app_biblio/home_bibliothecaire.html')
 
 
 # Fonctionnalités : Membre
@@ -38,7 +40,7 @@ def ajoutmembre(request):
             membre.save()
             #Notification de confirmation de création
             messages.success(request, "Le membre a été mis ajouté avec succès !")
-            return redirect('listmembres')
+            return redirect('app_bibliothecaire:listmembres')
         #Si le formulaire n'est pas valide, la page ajoutmembre est réaffichée avec le formulaire rempli 'creationMembre
         #indiquant les erreurs ou champs manquants
         else:
@@ -64,7 +66,7 @@ def updatemembre(request, id):
             membre.phone = update_membre.cleaned_data['phone']
             membre.save()
             messages.success(request, "Le membre a été mis à jour avec succès !")
-        return redirect('listmembres')
+        return redirect('app_bibliothecaire:listmembres')
     #Si la méthode est GET, une instance du formulaire Updatemembre est créée,
     #les champs du formulaire sont pré-remplis avec les données existantes du membre (initial={...})
     else:
@@ -81,7 +83,7 @@ def deletemembre(request, id):
     membre = get_object_or_404(Membre, pk=id)
     membre.delete()
     messages.success(request, "Le membre a été supprimé avec succès !")
-    return redirect('listmembres')
+    return redirect('app_bibliothecaire:listmembres')
 
 
 # Fonctionnalités : Média
@@ -89,14 +91,15 @@ def listemedia(request):
     livres = Livre.objects.all()
     dvds = Dvd.objects.all()
     cds = Cd.objects.all()
-    plateaux = PlateauDeJeu.objects.all()
+    plateaux = Plateau.objects.all()
+
     context = {
         'livres': livres,
         'dvds': dvds,
         'cds': cds,
         'plateaux': plateaux,
     }
-    #Ici la variable 'context' permet de regrouper les données tq {'livres': livres, 'dvds': dvds, ...)
+    # Ici la variable 'context' permet de regrouper les données tq {'livres': livres, 'dvds': dvds, ...)
     return render(request, 'media/listmedia.html', context)
 
 
@@ -113,9 +116,10 @@ def ajout_livre(request):
             livre.auteur = livreform.cleaned_data['auteur']
             livre.disponibility = livreform.cleaned_data['disponibility']
             livre.nb_pages = livreform.cleaned_data['nb_pages']
+            livre.category = livreform.cleaned_data['categorie']
             livre.save()
             messages.success(request, "Le livre a été ajouté à la liste des médias avec succès !")
-            return redirect('ajoutmedia')
+            return redirect('app_bibliothecaire:ajoutmedia')
         else:
             return render(request, 'media/ajout_livre.html', {'livreForm': livreform})
     else:
@@ -132,9 +136,10 @@ def ajout_dvd(request):
             dvd.auteur = dvdform.cleaned_data['auteur']
             dvd.disponibility = dvdform.cleaned_data['disponibility']
             dvd.genre = dvdform.cleaned_data['genre']
+            dvd.category = dvdform.cleaned_data['categorie']
             dvd.save()
             messages.success(request, "Le DVD a été ajouté à la liste des médias avec succès !")
-            return redirect('ajoutmedia')
+            return redirect('app_bibliothecaire:ajoutmedia')
         else:
             return render(request, 'media/ajout_dvd.html', {'dvdForm': dvdform})
     else:
@@ -151,9 +156,10 @@ def ajout_cd(request):
             cd.auteur = cdform.cleaned_data['auteur']
             cd.disponibility = cdform.cleaned_data['disponibility']
             cd.date_sortie = cdform.cleaned_data['date_sortie']
+            cd.category = cdform.cleaned_data['categorie']
             cd.save()
             messages.success(request, "Le CD a été ajouté à la liste des médias avec succès !")
-            return redirect('ajoutmedia')
+            return redirect('app_bibliothecaire:ajoutmedia')
         else:
             return render(request, 'media/ajout_cd.html', {'cdForm': cdform})
     else:
@@ -165,18 +171,74 @@ def ajout_plateau(request):
     if request.method == 'POST':
         plateauform = PlateauForm(request.POST)
         if plateauform.is_valid():
-            plateaudejeu = PlateauDeJeu()
-            plateaudejeu.name = plateauform.cleaned_data['name']
-            plateaudejeu.auteur = plateauform.cleaned_data['auteur']
-            plateaudejeu.nombre_joueurs_min = plateauform.cleaned_data['nombre_joueurs_min']
-            plateaudejeu.nombre_joueurs_max = plateauform.cleaned_data['nombre_joueurs_max']
-            plateaudejeu.disponibility = plateauform.cleaned_data['disponibility']
-            plateaudejeu.save()
+            plateau = Plateau()
+            plateau.name = plateauform.cleaned_data['name']
+            plateau.auteur = plateauform.cleaned_data['auteur']
+            plateau.nombre_joueurs_min = plateauform.cleaned_data['nombre_joueurs_min']
+            plateau.nombre_joueurs_max = plateauform.cleaned_data['nombre_joueurs_max']
+            plateau.disponibility = plateauform.cleaned_data['disponibility']
+            plateau.category = plateauform.cleaned_data['categorie']
+            plateau.save()
             messages.success(request, "Le Plateau de jeux a été ajouté à la liste des médias avec succès !")
-            return redirect('ajoutmedia')
+            return redirect('app_bibliothecaire:ajoutmedia')
         else:
             return render(request, 'media/ajout_plateau.html', {'plateauForm': plateauform})
     else:
         plateauform = PlateauForm()
         return render(request, 'media/ajout_plateau.html', {'plateauForm': plateauform})
+
+
+def creer_emprunt(request):
+    categorie = request.GET.get('categorie')
+    form = EmpruntForm(request.GET or None, categorie=categorie)
+
+    if request.method == 'POST':
+        form = EmpruntForm(request.POST, categorie=categorie)
+        if form.is_valid():
+            emprunteur = form.cleaned_data['membre_id']
+            media = form.cleaned_data['media_id']
+
+            emprunt = Emprunt(emprunteur=emprunteur, media=media)
+            emprunt.save()
+
+            messages.success(request, "Emprunt créé avec succès !")
+            return HttpResponseRedirect(reverse('app_bibliothecaire:creer_emprunt'))
+
+    return render(request, 'emprunt/creer_emprunt.html', {'form': form})
+
+
+
+
+"""def creer_emprunt(request):
+    message = None
+    categorie = None
+    medias = Media.objects.all() 
+    if request.method == 'POST':
+        categorie = request.POST.get('categorie') 
+        empruntform = EmpruntForm(request.POST, categorie=categorie)
+        if empruntform.is_valid():
+            membre = empruntform.cleaned_data['membre_id']
+            media = empruntform.cleaned_data['media_id']
+
+            try:
+                emprunt = Emprunt(emprunteur=membre, media=media)
+                emprunt.save()
+                message = f"Emprunt créé pour {media.name} par {membre.name}."
+            except ValueError as e:
+                message = f"Erreur : {str(e)}"
+    else:
+        empruntform = EmpruntForm()
+
+    return render(request,"emprunt/creer_emprunt.html",{
+        "form": empruntform,
+        "message": message,
+        "medias": medias,
+    })"""
+
+def deletemedia(request, id):
+    media = get_object_or_404(Media, pk=id)
+    media.delete()
+    messages.success(request, "Le media a été supprimé avec succès !")
+    return redirect('app_bibliothecaire:listmedia')
+
 
