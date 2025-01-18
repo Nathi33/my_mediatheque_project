@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Créer un Emprunt</title>
+</head>
+<body>
+    <a href="{% url 'app_bibliothecaire:home_bibliothecaire' %}">Retour au menu</a>
+    <h2>Créer un Emprunt</h2>
+
+    <!-- Formulaire pour filtrer -->
+    <form method="get">
+        {{ form.categorie.label_tag }}  <!-- Ajoute le label associé -->
+        {{ form.categorie }}
+
+    <button type="submit">Rechercher</button>
+    </form><br>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.membre_id.label_tag }}<br>
+        {{ form.membre_id }}<br><br>
+
+
+        {{ form.media_id.label_tag }}<br>
+        {{ form.media_id }}<br><br>
+        <button type="submit">Enregistrer l'emprunt</button>
+    </form>
+
+
+    {% if message %}
+        <p>{{ message }}</p>
+    {% endif %}
+
+</body>
+</html>

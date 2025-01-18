@@ -15,8 +15,18 @@
           <p>Titre : {{ livre.name }}</p>
           <p>Auteur : {{ livre.auteur }}</p>
           <p>Nombre de pages : {{ livre.nb_pages }}</p>
-          <p>Disponible : {{ livre.disponibility }}</p>
-          <p> Emprunté par ...  le ... </p>
+          {% if livre.emprunts.exists %}
+            {% for emprunt in livre.emprunts.all %}
+                <p> Emprunté par {{ emprunt.emprunteur.name }} le {{ emprunt.date_emprunt|date:"d/m/Y" }} </p>
+                <p> Date de retour prévue avant le {{ emprunt.date_retour_prevue|date:"d/m/Y" }}</p>
+            {% endfor %}
+          {% else %}
+            <p>Disponible à l'emprunt</p>
+          {% endif %}
+          <form action="{% url 'app_bibliothecaire:deletemedia' id=livre.id %}" method="POST" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit">Supprimer</button>
+          </form>
       </li><br>
       {% endfor %}
     </ul>
@@ -28,8 +38,18 @@
           <p>Titre : {{ dvd.name }}</p>
           <p>Réalisateur : {{ dvd.auteur }}</p>
           <p>Genre : {{ dvd.genre }}</p>
-          <p>Disponible : {{ dvd.disponibility }}</p>
-          <p> Emprunté par ...  le ... </p>
+          {% if dvd.emprunts.exists %}
+            {% for emprunt in dvd.emprunts.all %}
+                <p> Emprunté par {{ emprunt.emprunteur.name }} le {{ emprunt.date_emprunt|date:"d/m/Y" }} </p>
+                <p> Date de retour prévue avant le {{ emprunt.date_retour_prevue|date:"d/m/Y" }}</p>
+            {% endfor %}
+          {% else %}
+            <p>Disponible à l'emprunt</p>
+          {% endif %}
+          <form action="{% url 'app_bibliothecaire:deletemedia' id=dvd.id %}" method="POST" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit">Supprimer</button>
+          </form>
       </li><br>
       {% endfor %}
     </ul>
@@ -40,14 +60,24 @@
         <li>
           <p>Titre : {{ cd.name }}</p>
           <p>Artiste : {{ cd.auteur }}</p>
-          <p>date de sortie : {{ cd.date_sortie }}</p>
-          <p>Disponible : {{ cd.disponibility }}</p>
-          <p> Emprunté par ...  le ... </p>
+          <p>Date de sortie : {{ cd.date_sortie }}</p>
+          {% if cd.emprunts.exists %}
+            {% for emprunt in cd.emprunts.all %}
+                <p> Emprunté par {{ emprunt.emprunteur.name }} le {{ emprunt.date_emprunt|date:"d/m/Y" }} </p>
+                <p> Date de retour prévue avant le {{ emprunt.date_retour_prevue|date:"d/m/Y" }}</p>
+            {% endfor %}
+          {% else %}
+            <p>Disponible à l'emprunt</p>
+          {% endif %}
+          <form action="{% url 'app_bibliothecaire:deletemedia' id=cd.id %}" method="POST" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit">Supprimer</button>
+          </form>
       </li><br>
       {% endfor %}
     </ul>
 
-    <h2>Plateaux de Jeux</h2>
+    <h2>Jeux de plateau</h2>
     <ul>
         {% for plateau in plateaux %}
         <li>

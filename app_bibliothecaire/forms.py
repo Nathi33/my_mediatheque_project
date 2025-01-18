@@ -1,4 +1,5 @@
 from django import forms
+from .models import Membre, Media
 
 
 class Creationmembre(forms.Form):
@@ -46,6 +47,12 @@ class Updatemembre(forms.Form):
 
 
 class LivreForm(forms.Form):
+    CATEGORIES_CHOICES = [
+        ('livre', 'Livres'),
+        ('dvd', 'Dvd'),
+        ('cd', 'Cd'),
+        ('plateau', 'Plateau'),
+    ]
     name = forms.CharField(
         max_length=150,
         required=True,
@@ -65,9 +72,21 @@ class LivreForm(forms.Form):
         required=False,
         label="Nombre de pages",
     )
+    categorie = forms.ChoiceField(
+        choices=CATEGORIES_CHOICES,
+        label="Catégorie",
+        required=False, # Permet de ne pas forcer la sélection
+        initial='livre',
+    )
 
 
 class DvdForm(forms.Form):
+    CATEGORIES_CHOICES = [
+        ('livre', 'Livres'),
+        ('dvd', 'Dvd'),
+        ('cd', 'Cd'),
+        ('plateau', 'Plateau'),
+    ]
     name = forms.CharField(
         max_length=150,
         required=True,
@@ -87,9 +106,21 @@ class DvdForm(forms.Form):
         required=False,
         label="Genre",
     )
+    categorie = forms.ChoiceField(
+        choices=CATEGORIES_CHOICES,
+        label="Catégorie",
+        required=False,  # Permet de ne pas forcer la sélection
+        initial='dvd',
+    )
 
 
 class CdForm(forms.Form):
+    CATEGORIES_CHOICES = [
+        ('livre', 'Livres'),
+        ('dvd', 'Dvd'),
+        ('cd', 'Cd'),
+        ('plateau', 'Plateau'),
+    ]
     name = forms.CharField(
         max_length=150,
         required=True,
@@ -109,9 +140,21 @@ class CdForm(forms.Form):
         required=False,
         label="Date de sortie"
     )
+    categorie = forms.ChoiceField(
+        choices=CATEGORIES_CHOICES,
+        label="Catégorie",
+        required=False,  # Permet de ne pas forcer la sélection
+        initial='cd',
+    )
 
 
 class PlateauForm(forms.Form):
+    CATEGORIES_CHOICES = [
+        ('livre', 'Livres'),
+        ('dvd', 'Dvd'),
+        ('cd', 'Cd'),
+        ('plateau', 'Plateau'),
+    ]
     name = forms.CharField(
         max_length=150,
         required=True,
@@ -135,3 +178,43 @@ class PlateauForm(forms.Form):
         initial=False,
         label="Disponible",
     )
+    categorie = forms.ChoiceField(
+        choices=CATEGORIES_CHOICES,
+        label="Catégorie",
+        required=False,  # Permet de ne pas forcer la sélection
+        initial='plateau',
+    )
+
+class EmpruntForm(forms.Form):
+    CATEGORIES_CHOICES = [
+        ('', ''),
+        ('livre', 'Livres'),
+        ('dvd', 'Dvd'),
+        ('cd', 'Cd'),
+        ('plateau', 'Plateau')
+    ]
+    categorie = forms.ChoiceField(
+        choices=CATEGORIES_CHOICES,
+        label="Sélectionner une catégorie",
+        required=False  # Permet de ne pas forcer la sélection
+    )
+    membre_id = forms.ModelChoiceField(
+        queryset=Membre.objects.all(),
+        label="Sélectionner un membre",
+    )
+    media_id = forms.ModelChoiceField(
+        queryset=Media.objects.none(), #Initialement vide
+        label="Sélectionner un média",
+        required=False
+    )
+
+    def __init__(self, *args, **kwargs):
+        categorie = kwargs.pop('categorie', None)  # Récupère la catégorie depuis la vue
+        super().__init__(*args, **kwargs)
+
+        # Si une catégorie est renseignée, on filtre les médias par cette catégorie
+        if categorie:
+            self.fields['media_id'].queryset = Media.objects.filter(category=categorie, disponibility=True)
+        else:
+            self.fields['media_id'].queryset = Media.objects.filter(disponibility=True)
+
