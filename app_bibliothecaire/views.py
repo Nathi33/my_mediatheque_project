@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from app_bibliothecaire.models import Membre, Livre, Dvd, Cd, Plateau, Emprunt, Media
-from app_bibliothecaire.forms import Creationmembre, Updatemembre, LivreForm, DvdForm, CdForm, PlateauForm, EmpruntForm
+from app_bibliothecaire.forms import (Creationmembre, Updatemembre, LivreForm, DvdForm,
+                                      CdForm, PlateauForm, EmpruntForm, SelectEmprunteurForm, RetourEmpruntForm)
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -208,32 +209,44 @@ def creer_emprunt(request):
 
 
 
+def retour_emprunt(request):
+    if 'emprunteur_id' not in request.GET:
+        # Étape 1 : Sélection de l'emprunteur
+        if request.method == 'POST':
+            form = SelectEmprunteurForm(request.POST)
+            if form.is_valid():
+                emprunteur = form.cleaned_data['emprunteur']
+                return redirect(f"{request.path}?emprunteur_id={emprunteur.id}")
+        else:
+            form = SelectEmprunteurForm()
+        return render(request, 'emprunt/select_emprunteur.html', {'form': form})
 
-"""def creer_emprunt(request):
-    message = None
-    categorie = None
-    medias = Media.objects.all() 
+    # Étape 2 : Gestion des emprunts pour l'emprunteur sélectionné
+    emprunteur_id = request.GET.get('emprunteur_id')
+    emprunteur = get_object_or_404(Membre, id=emprunteur_id)
+    emprunts = Emprunt.objects.filter(emprunteur=emprunteur, date_retour_effective__isnull=True)
+
     if request.method == 'POST':
-        categorie = request.POST.get('categorie') 
-        empruntform = EmpruntForm(request.POST, categorie=categorie)
-        if empruntform.is_valid():
-            membre = empruntform.cleaned_data['membre_id']
-            media = empruntform.cleaned_data['media_id']
+        form = RetourEmpruntForm(request.POST)
+        if form.is_valid():
+            # Sauvegarde l'emprunt retourné
+            emprunt = form.save()
 
-            try:
-                emprunt = Emprunt(emprunteur=membre, media=media)
-                emprunt.save()
-                message = f"Emprunt créé pour {media.name} par {membre.name}."
-            except ValueError as e:
-                message = f"Erreur : {str(e)}"
+            # Mettre à jour la disponibilité du média après le retour
+            media = emprunt.media # On récupère le média lié à l'emprunt
+            media.disponibility = True # Le média devient disponible
+            media.save() # On enregistre la modification
+
+            # Rediriger après la mise à jour
+            return redirect(f"{request.path}?emprunteur_id={emprunteur.id}")
     else:
-        empruntform = EmpruntForm()
+        forms = [RetourEmpruntForm(emprunt=emprunt) for emprunt in emprunts]
 
-    return render(request,"emprunt/creer_emprunt.html",{
-        "form": empruntform,
-        "message": message,
-        "medias": medias,
-    })"""
+    return render(request, 'emprunt/retour_emprunt.html', {
+        'emprunteur': emprunteur,
+        'forms': forms
+    })
+
 
 def deletemedia(request, id):
     media = get_object_or_404(Media, pk=id)

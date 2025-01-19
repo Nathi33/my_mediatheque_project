@@ -17,8 +17,13 @@
           <p>Nombre de pages : {{ livre.nb_pages }}</p>
           {% if livre.emprunts.exists %}
             {% for emprunt in livre.emprunts.all %}
-                <p> Emprunté par {{ emprunt.emprunteur.name }} le {{ emprunt.date_emprunt|date:"d/m/Y" }} </p>
+                {% if emprunt.date_retour_effective %}
+                    <p>Disponible à l'emprunt</p>
+                {% else %}
+                <p> Emprunté par {{ emprunt.emprunteur.name }} {{ emprunt.emprunteur.first_name }}
+                    le {{ emprunt.date_emprunt|date:"d/m/Y" }} </p>
                 <p> Date de retour prévue avant le {{ emprunt.date_retour_prevue|date:"d/m/Y" }}</p>
+                {% endif %}
             {% endfor %}
           {% else %}
             <p>Disponible à l'emprunt</p>
@@ -40,8 +45,13 @@
           <p>Genre : {{ dvd.genre }}</p>
           {% if dvd.emprunts.exists %}
             {% for emprunt in dvd.emprunts.all %}
-                <p> Emprunté par {{ emprunt.emprunteur.name }} le {{ emprunt.date_emprunt|date:"d/m/Y" }} </p>
+                {% if emprunt.date_retour_effective %}
+                    <p>Disponible à l'emprunt</p>
+                {% else %}
+                <p> Emprunté par {{ emprunt.emprunteur.name }} {{ emprunt.emprunteur.first_name }}
+                    le {{ emprunt.date_emprunt|date:"d/m/Y" }} </p>
                 <p> Date de retour prévue avant le {{ emprunt.date_retour_prevue|date:"d/m/Y" }}</p>
+                {% endif %}
             {% endfor %}
           {% else %}
             <p>Disponible à l'emprunt</p>
@@ -63,8 +73,13 @@
           <p>Date de sortie : {{ cd.date_sortie }}</p>
           {% if cd.emprunts.exists %}
             {% for emprunt in cd.emprunts.all %}
-                <p> Emprunté par {{ emprunt.emprunteur.name }} le {{ emprunt.date_emprunt|date:"d/m/Y" }} </p>
+                {% if emprunt.date_retour_effective %}
+                    <p>Disponible à l'emprunt</p>
+                {% else %}
+                <p> Emprunté par {{ emprunt.emprunteur.name }} {{ emprunt.emprunteur.first_name }}
+                    le {{ emprunt.date_emprunt|date:"d/m/Y" }} </p>
                 <p> Date de retour prévue avant le {{ emprunt.date_retour_prevue|date:"d/m/Y" }}</p>
+                {% endif %}
             {% endfor %}
           {% else %}
             <p>Disponible à l'emprunt</p>

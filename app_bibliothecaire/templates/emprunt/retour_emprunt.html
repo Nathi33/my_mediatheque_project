@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Retour d'un Emprunt</title>
+</head>
+<body>
+    <a href="{% url 'app_bibliothecaire:home_bibliothecaire' %}">Retour au menu</a>
+    <h2>Retour d'emprunt pour {{ emprunteur.name }} {{ emprunteur.first_name }}</h2>
+    <form method="post">
+        {% csrf_token %}
+        {% for form in forms %}
+            <fieldset>
+                {{ form.as_p }}
+                <hr>
+            </fieldset><br>
+        {% endfor %}
+        <button type="submit">Valider les retours</button>
+    </form>
+
+
+</body>
+</html>
