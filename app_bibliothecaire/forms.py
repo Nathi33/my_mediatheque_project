@@ -1,5 +1,5 @@
 from django import forms
-from .models import Membre, Media
+from .models import Membre, Media, Emprunt
 
 
 class Creationmembre(forms.Form):
@@ -218,3 +218,40 @@ class EmpruntForm(forms.Form):
         else:
             self.fields['media_id'].queryset = Media.objects.filter(disponibility=True)
 
+
+class SelectEmprunteurForm(forms.Form):
+    emprunteur = forms.ModelChoiceField(
+        queryset=Membre.objects.all(),
+        label="Sélectionner un emprunteur",
+        widget=forms.Select
+    )
+
+
+class RetourEmpruntForm(forms.Form):
+    emprunt_id = forms.IntegerField(widget=forms.HiddenInput)
+    media_name = forms.CharField(label="Nom du média", required=False, disabled=True)
+    date_emprunt = forms.DateField(label="Date d'emprunt", required=False, disabled=True)
+    date_retour_prevue = forms.DateField(label="Date de retour prévue", required=False, disabled=True)
+    date_retour_effective = forms.DateField(
+        label="Date de retour effective",
+        widget=forms.SelectDateWidget
+    )
+
+    def __init__(self, *args, **kwargs):
+        emprunt = kwargs.pop('emprunt', None)
+        super().__init__(*args, **kwargs)
+        if emprunt:
+            self.fields['emprunt_id'].initial = emprunt.id
+            self.fields['media_name'].initial = emprunt.media.name
+            self.fields['date_emprunt'].initial = emprunt.date_emprunt
+            self.fields['date_retour_prevue'].initial = emprunt.date_retour_prevue
+
+    def save(self):
+        emprunt_id = self.cleaned_data['emprunt_id']
+        date_retour_effective = self.cleaned_data['date_retour_effective']
+        emprunt = Emprunt.objects.get(id=emprunt_id)
+        emprunt.date_retour_effective = date_retour_effective
+        emprunt.media.disponibility = True
+        emprunt.media.save()
+        emprunt.save()
+        return emprunt

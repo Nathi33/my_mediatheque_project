@@ -29,7 +29,7 @@ class Media(models.Model):
     name = models.fields.CharField(max_length=150)
     auteur = models.fields.CharField(max_length=250)
     category = models.CharField(max_length=10, choices=CATEGORY_CHOICES, default='livre')
-    disponibility = models.BooleanField(default=True, null=True, blank=True)
+    disponibility = models.BooleanField(default=True)
     emprunteur = models.ForeignKey(Membre, null=True, blank=True, on_delete=models.SET_NULL)
     date_emprunt = models.DateTimeField(null=True, blank=True)
 
