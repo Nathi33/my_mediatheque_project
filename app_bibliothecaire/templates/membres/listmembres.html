@@ -42,11 +42,28 @@
           <p>Email : {{ membre.email }}</p>
           <p>Téléphone : {{ membre.phone }}</p>
           <p>Créé le : {{ membre.creation_date|date:"d F Y" }}</p>
+
           <button><a href="{% url 'app_bibliothecaire:updatemembre' id=membre.id %}"> Modifier</a></button>
           <form action="{% url 'app_bibliothecaire:deletemembre' id=membre.id %}" method="POST" style="display:inline;">
                 {% csrf_token %}
                 <button type="submit">Supprimer</button>
           </form>
+
+          <p><strong>Emprunts en cours :</strong></p>
+          <ul>
+            {% for emprunt in membre.emprunts_en_cours %}
+            <li>
+                <p>Média : {{ emprunt.media.name }}</p>
+                <p>Date d'emprunt : {{ emprunt.date_emprunt|date:"d F Y" }}</p>
+                <p>Date de retour prévue : {{ emprunt.date_retour_prevue|date:"d F Y" }}</p>
+                <p>Status : {% if emprunt.date_retour_effective %} Retour effectué le {{ emprunt.date_retour_effective|date:"d F Y" }} {% else %} En cours {% endif %}</p>
+            </li>
+            {% empty %}
+            <p>Aucun emprunt en cours.</p>
+            {% endfor %}
+          </ul>
+
+
       </li><br>
       {% endfor %}
     </ul>
