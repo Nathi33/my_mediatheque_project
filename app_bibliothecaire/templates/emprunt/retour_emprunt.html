@@ -2,22 +2,25 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Retour d'un Emprunt</title>
+    <title>Retour des Emprunts</title>
 </head>
 <body>
     <a href="{% url 'app_bibliothecaire:home_bibliothecaire' %}">Retour au menu</a>
-    <h2>Retour d'emprunt pour {{ emprunteur.name }} {{ emprunteur.first_name }}</h2>
-    <form method="post">
-        {% csrf_token %}
-        {% for form in forms %}
-            <fieldset>
-                {{ form.as_p }}
-                <hr>
-            </fieldset><br>
-        {% endfor %}
-        <button type="submit">Valider les retours</button>
-    </form>
+    <h2>Emprunts en cours de {{ emprunteur.name }} {{ emprunteur.first_name }}</h2>
 
+    {% for emprunt in emprunts %}
+        <p>
+            <strong>{{ emprunt.media.name }} - {{ emprunt.media.category }}</strong><br><br>
+            Date d'emprunt le {{ emprunt.date_emprunt|date:"d/m/Y" }}<br>
+            Date de retour prévue avant le {{ emprunt.date_retour_prevue|date:"d/m/Y" }}<br><br>
+            <a href="{% url 'app_bibliothecaire:retour_emprunt' %}?emprunteur_id={{ emprunteur.id }}&emprunt_id={{ emprunt.id }}">
+                <button>Faire le retour</button>
+            </a>
+        </p><br>
+    {% endfor %}
 
+     {% for message in messages %}
+            <div style="color: green;">{{ message }}</div>
+     {% endfor %}
 </body>
 </html>

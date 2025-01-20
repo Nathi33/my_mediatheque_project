@@ -14,7 +14,7 @@
         <!-- affiche le formulaire dvdForm et place chaque champ dans une balise <p> -->
         {{ dvdForm.as_p }}
         <button type="submit">Ajouter le DVD</button>
-    </form>
+    </form><br>
     <!-- génère dynamiquement l'URL correspondant à une view Django en utilisant
     son nom de route définit dans urls.py -->
     <a href="{% url 'app_bibliothecaire:ajoutmedia' %}">Retour</a>

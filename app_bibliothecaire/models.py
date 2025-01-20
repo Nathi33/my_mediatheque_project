@@ -53,14 +53,15 @@ class Plateau(Media):
     nombre_joueurs_max = models.IntegerField(null=True, blank=True)
 
 
-def get_default_date_emprunt():
-    return now().date() + timedelta(days=7)
+def get_default_date_emprunt(date_emprunt):
+    # Calcule la date de retour prévue en fonction de la date d'emprunt
+    return date_emprunt + timedelta(days=7)
 
 
 class Emprunt(models.Model):
     emprunteur = models.ForeignKey(
         Membre, #Relation vers la classe Membre
-        on_delete=models.CASCADE, #Suipprime l'emprunt si le membre est supprimé
+        on_delete=models.CASCADE, #Supprime l'emprunt si le membre est supprimé
         related_name="emprunts" #Permet de retrouver ts les emprunts d'un membre via membre.emprunts.all()
     )
     media = models.ForeignKey(
@@ -68,7 +69,7 @@ class Emprunt(models.Model):
         on_delete=models.CASCADE,
         related_name="emprunts" #Permet de retrouver tous les emprunts pour un média
     )
-    date_emprunt = models.DateTimeField(auto_now_add=True)
+    date_emprunt = models.DateTimeField(null=True, blank=True)
     #L'argument default permet de préciser une valeur par défaut si l'utilisateur n'en fournit pas,
     #lamba est une fonction pour calculer la date de retour prévue au moment de la création de l'emprunt,
     #now() renvoie la date et l'heure actuelle et date() extrait uniquement la date sans l'heure,
@@ -77,34 +78,40 @@ class Emprunt(models.Model):
     date_retour_effective = models.DateField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        #Vérifie que le média n'est pas un plateau de jeu
-        if isinstance(self.media, Plateau):
-            raise ValueError("les Plateaux de jeux ne peuvent pas être empruntés.")
+        # Si c'est un retour (date_retour_effective non nulle)
+        if self.date_retour_effective:
+            # Marque le média comme disponible lors du retour
+            self.media.disponibility = True
+            self.media.save()
+        else:
+            #Vérifie que le média n'est pas un plateau de jeu
+            if isinstance(self.media, Plateau):
+                raise ValueError("les Plateaux de jeux ne peuvent pas être empruntés.")
 
-        #Vérifie que le membre n'a pas 3 emprunts actifs
-        emprunts_actifs = Emprunt.objects.filter(
-            emprunteur=self.emprunteur,
-            date_retour_effective__isnull=True
-        ).count()
-        if emprunts_actifs >= 3:
-            raise ValueError(f"{self.emprunteur} a déjà 3 emprunts actifs.")
+            #Vérifie que le membre n'a pas 3 emprunts actifs
+            emprunts_actifs = Emprunt.objects.filter(
+                emprunteur=self.emprunteur,
+                date_retour_effective__isnull=True
+            ).count()
+            if emprunts_actifs >= 3:
+                raise ValueError(f"{self.emprunteur} a déjà 3 emprunts actifs.")
 
-        #Vérifie si le membre a des emprunts en retard
-        emprunts_en_retard = Emprunt.objects.filter(
-            emprunteur=self.emprunteur,
-            date_retour_effective__isnull=True,
-            date_retour_prevue__lt=now().date()
-        )
-        if emprunts_en_retard.exists():
-            raise ValueError(f"{self.emprunteur} a des emprunts en retard et ne peut pas emprunter de nouveaux médias.")
+            #Vérifie si le membre a des emprunts en retard
+            emprunts_en_retard = Emprunt.objects.filter(
+                emprunteur=self.emprunteur,
+                date_retour_effective__isnull=True,
+                date_retour_prevue__lt=now().date()
+            )
+            if emprunts_en_retard.exists():
+                raise ValueError(f"{self.emprunteur} a des emprunts en retard et ne peut pas emprunter de nouveaux médias.")
 
-        #Vérifie que le média est disponible
-        if not self.media.disponibility:
-            raise ValueError(f"{self.media.name} n'est pas disponible à l'emprunt.")
+            #Vérifie que le média est disponible
+            if not self.media.disponibility:
+                raise ValueError(f"{self.media.name} n'est pas disponible à l'emprunt.")
 
-        #Marque le média comme non disponible
-        self.media.disponibility = False
-        self.media.save()
+            #Marque le média comme non disponible
+            self.media.disponibility = False
+            self.media.save()
 
         super().save(*args, **kwargs)
 

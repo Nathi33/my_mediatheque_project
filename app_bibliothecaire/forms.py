@@ -1,5 +1,7 @@
 from django import forms
 from .models import Membre, Media, Emprunt
+from django.core.exceptions import ValidationError
+from datetime import datetime
 
 
 class Creationmembre(forms.Form):
@@ -207,6 +209,13 @@ class EmpruntForm(forms.Form):
         label="Sélectionner un média",
         required=False
     )
+    date_emprunt = forms.DateTimeField(
+        label="Date de l'emprunt",
+        required=True,
+        widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+        input_formats=['%Y-%m-%d']
+    )
+
 
     def __init__(self, *args, **kwargs):
         categorie = kwargs.pop('categorie', None)  # Récupère la catégorie depuis la vue
@@ -217,6 +226,16 @@ class EmpruntForm(forms.Form):
             self.fields['media_id'].queryset = Media.objects.filter(category=categorie, disponibility=True)
         else:
             self.fields['media_id'].queryset = Media.objects.filter(disponibility=True)
+
+    def clean_date_emprunt(self):
+        date_emprunt = self.cleaned_data['date_emprunt']
+        # Convertir en date uniquement si c'est un datetime
+        if isinstance(date_emprunt, datetime):
+            date_emprunt = date_emprunt.date()
+        # Vérifie si la date est valide, même si elle est passée
+        if date_emprunt > datetime.today().date():
+            raise forms.ValidationError("La date d'emprunt ne peut pas être dans le futur.")
+        return date_emprunt
 
 
 class SelectEmprunteurForm(forms.Form):
@@ -232,10 +251,13 @@ class RetourEmpruntForm(forms.Form):
     media_name = forms.CharField(label="Nom du média", required=False, disabled=True)
     date_emprunt = forms.DateField(label="Date d'emprunt", required=False, disabled=True)
     date_retour_prevue = forms.DateField(label="Date de retour prévue", required=False, disabled=True)
-    date_retour_effective = forms.DateField(
+    date_retour_effective = forms.DateTimeField(
         label="Date de retour effective",
-        widget=forms.SelectDateWidget
+        required=True,
+        widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+        input_formats=['%Y-%m-%d']
     )
+
 
     def __init__(self, *args, **kwargs):
         emprunt = kwargs.pop('emprunt', None)
@@ -246,12 +268,39 @@ class RetourEmpruntForm(forms.Form):
             self.fields['date_emprunt'].initial = emprunt.date_emprunt
             self.fields['date_retour_prevue'].initial = emprunt.date_retour_prevue
 
+    def clean_date_retour_effective(self):
+        # Validation de la date de retour effective
+        date_retour_effective = self.cleaned_data['date_retour_effective']
+        emprunt_id = self.cleaned_data.get('emprunt_id')
+        try:
+            emprunt = Emprunt.objects.get(id=emprunt_id)
+        except Emprunt.DoesNotExist:
+            raise ValidationError("L'emprunt sélectionné n'existe pas.")
+
+        # Si date_retour_effective est un datetime, la convertir en date
+        if isinstance(date_retour_effective, datetime):
+            date_retour_effective = date_retour_effective.date()
+
+        # Vérifie que la date de retour effective est postérieure à la date d'emprunt
+        if date_retour_effective < emprunt.date_emprunt.date():
+            raise ValidationError("La date de retour effective ne peut pas être antérieure à la date d'emprunt.")
+
+        # Vérifie si l'emprunt a déjà été retourné
+        if emprunt.date_retour_effective:
+            raise ValidationError("Cet emprunt a déjà été retourné.")
+
+        return date_retour_effective
+
     def save(self):
+        # Enregistre un retour d'emprunt
         emprunt_id = self.cleaned_data['emprunt_id']
         date_retour_effective = self.cleaned_data['date_retour_effective']
         emprunt = Emprunt.objects.get(id=emprunt_id)
+
+        # Mise à jour de la date de retour effective
         emprunt.date_retour_effective = date_retour_effective
-        emprunt.media.disponibility = True
+        emprunt.media.disponibility = True # Rend le média disponible après retour
         emprunt.media.save()
         emprunt.save()
+
         return emprunt

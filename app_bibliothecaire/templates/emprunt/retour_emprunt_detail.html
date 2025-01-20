@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Retour de l'emprunt</title>
+</head>
+<body>
+    <h2>Retour de l'emprunt pour le média : {{ emprunt.media.name }}</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Confirmer le retour</button>
+    </form><br>
+    <a href="{% url 'app_bibliothecaire:retour_emprunt' %}?emprunteur_id={{ emprunt.emprunteur.id }}">
+        Retour à la liste des emprunts
+    </a>
+</body>
+</html>
