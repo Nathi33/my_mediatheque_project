@@ -15,16 +15,11 @@
           <p>Titre : {{ livre.name }}</p>
           <p>Auteur : {{ livre.auteur }}</p>
           <p>Nombre de pages : {{ livre.nb_pages }}</p>
-          {% if livre.emprunts.exists %}
-            {% for emprunt in livre.emprunts.all %}
-                {% if emprunt.date_retour_effective %}
-                    <p>Disponible à l'emprunt</p>
-                {% else %}
-                <p> Emprunté par {{ emprunt.emprunteur.name }} {{ emprunt.emprunteur.first_name }}
-                    le {{ emprunt.date_emprunt|date:"d/m/Y" }} </p>
-                <p> Date de retour prévue avant le {{ emprunt.date_retour_prevue|date:"d/m/Y" }}</p>
-                {% endif %}
-            {% endfor %}
+          {% if livre.emprunt_en_cours %}
+            <p>Emprunté par {{ livre.emprunt_en_cours.emprunteur.name }}
+                {{ livre.emprunt_en_cours.emprunteur.first_name }}
+                le {{ livre.emprunt_en_cours.date_emprunt|date:"d/m/Y" }}</p>
+            <p>Date de retour prévue avant le {{ livre.emprunt_en_cours.date_retour_prevue|date:"d/m/Y" }}</p>
           {% else %}
             <p>Disponible à l'emprunt</p>
           {% endif %}
@@ -43,16 +38,11 @@
           <p>Titre : {{ dvd.name }}</p>
           <p>Réalisateur : {{ dvd.auteur }}</p>
           <p>Genre : {{ dvd.genre }}</p>
-          {% if dvd.emprunts.exists %}
-            {% for emprunt in dvd.emprunts.all %}
-                {% if emprunt.date_retour_effective %}
-                    <p>Disponible à l'emprunt</p>
-                {% else %}
-                <p> Emprunté par {{ emprunt.emprunteur.name }} {{ emprunt.emprunteur.first_name }}
-                    le {{ emprunt.date_emprunt|date:"d/m/Y" }} </p>
-                <p> Date de retour prévue avant le {{ emprunt.date_retour_prevue|date:"d/m/Y" }}</p>
-                {% endif %}
-            {% endfor %}
+          {% if dvd.emprunt_en_cours %}
+            <p>Emprunté par {{ dvd.emprunt_en_cours.emprunteur.name }}
+                {{ dvd.emprunt_en_cours.emprunteur.first_name }}
+                le {{ dvd.emprunt_en_cours.date_emprunt|date:"d/m/Y" }}</p>
+            <p>Date de retour prévue avant le {{ dvd.emprunt_en_cours.date_retour_prevue|date:"d/m/Y" }}</p>
           {% else %}
             <p>Disponible à l'emprunt</p>
           {% endif %}
@@ -71,16 +61,11 @@
           <p>Titre : {{ cd.name }}</p>
           <p>Artiste : {{ cd.auteur }}</p>
           <p>Date de sortie : {{ cd.date_sortie }}</p>
-          {% if cd.emprunts.exists %}
-            {% for emprunt in cd.emprunts.all %}
-                {% if emprunt.date_retour_effective %}
-                    <p>Disponible à l'emprunt</p>
-                {% else %}
-                <p> Emprunté par {{ emprunt.emprunteur.name }} {{ emprunt.emprunteur.first_name }}
-                    le {{ emprunt.date_emprunt|date:"d/m/Y" }} </p>
-                <p> Date de retour prévue avant le {{ emprunt.date_retour_prevue|date:"d/m/Y" }}</p>
-                {% endif %}
-            {% endfor %}
+          {% if cd.emprunt_en_cours %}
+            <p>Emprunté par {{ cd.emprunt_en_cours.emprunteur.name }}
+                {{ cd.emprunt_en_cours.emprunteur.first_name }}
+                le {{ cd.emprunt_en_cours.date_emprunt|date:"d/m/Y" }}</p>
+            <p>Date de retour prévue avant le {{ cd.emprunt_en_cours.date_retour_prevue|date:"d/m/Y" }}</p>
           {% else %}
             <p>Disponible à l'emprunt</p>
           {% endif %}

@@ -41,7 +41,7 @@
           <p>Prénom : {{ membre.first_name }}</p>
           <p>Email : {{ membre.email }}</p>
           <p>Téléphone : {{ membre.phone }}</p>
-          <p>Créé le : {{ membre.creation_date|date:"d F Y" }} à {{membre.creation_date|date:"H:i"}}</p>
+          <p>Créé le : {{ membre.creation_date|date:"d F Y" }}</p>
           <button><a href="{% url 'app_bibliothecaire:updatemembre' id=membre.id %}"> Modifier</a></button>
           <form action="{% url 'app_bibliothecaire:deletemembre' id=membre.id %}" method="POST" style="display:inline;">
                 {% csrf_token %}

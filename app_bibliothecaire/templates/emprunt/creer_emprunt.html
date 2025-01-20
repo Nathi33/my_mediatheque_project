@@ -24,13 +24,28 @@
 
         {{ form.media_id.label_tag }}<br>
         {{ form.media_id }}<br><br>
+
+        {{ form.date_emprunt.label_tag }}<br>
+        {{ form.date_emprunt }}<br><br>
         <button type="submit">Enregistrer l'emprunt</button>
     </form>
 
-
-    {% if message %}
-        <p>{{ message }}</p>
-    {% endif %}
-
+    {% if messages %}
+    {% for message in messages %}
+        {% if 'error' in message.tags %}
+            <p style="color:red;">
+                {{ message }}
+            </p>
+        {% elif 'success' in message.tags %}
+            <p style="color:green;">
+                {{ message }}
+            </p>
+        {% else %}
+            <p>
+                {{ message }}
+            </p>
+        {% endif %}
+    {% endfor %}
+{% endif %}
 </body>
 </html>

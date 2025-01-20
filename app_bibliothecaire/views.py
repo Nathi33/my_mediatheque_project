@@ -5,6 +5,7 @@ from app_bibliothecaire.forms import (Creationmembre, Updatemembre, LivreForm, D
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from datetime import timedelta
 
 
 # Fonctionnalité : Menu principal
@@ -93,6 +94,13 @@ def listemedia(request):
     dvds = Dvd.objects.all()
     cds = Cd.objects.all()
     plateaux = Plateau.objects.all()
+
+    for livre in livres:
+        livre.emprunt_en_cours = livre.emprunts.filter(date_retour_effective__isnull=True).first()
+    for dvd in dvds:
+        dvd.emprunt_en_cours = dvd.emprunts.filter(date_retour_effective__isnull=True).first()
+    for cd in cds:
+        cd.emprunt_en_cours = cd.emprunts.filter(date_retour_effective__isnull=True).first()
 
     context = {
         'livres': livres,
@@ -196,22 +204,33 @@ def creer_emprunt(request):
     if request.method == 'POST':
         form = EmpruntForm(request.POST, categorie=categorie)
         if form.is_valid():
-            emprunteur = form.cleaned_data['membre_id']
-            media = form.cleaned_data['media_id']
+            try:
+                emprunteur = form.cleaned_data['membre_id']
+                media = form.cleaned_data['media_id']
+                date_emprunt = form.cleaned_data['date_emprunt']
 
-            emprunt = Emprunt(emprunteur=emprunteur, media=media)
-            emprunt.save()
+                # Calculer la date de retour en fonction de la date d'emprunt
+                date_retour_prevue = date_emprunt + timedelta(days=7)
 
-            messages.success(request, "Emprunt créé avec succès !")
-            return HttpResponseRedirect(reverse('app_bibliothecaire:creer_emprunt'))
+                emprunt = Emprunt(emprunteur=emprunteur,
+                                  media=media,
+                                  date_emprunt=date_emprunt,
+                                  date_retour_prevue=date_retour_prevue)
+                emprunt.save()
+
+                messages.success(request, "Emprunt créé avec succès !")
+                return HttpResponseRedirect(reverse('app_bibliothecaire:creer_emprunt'))
+            except ValueError as e:
+                messages.error(request, str(e))
+
 
     return render(request, 'emprunt/creer_emprunt.html', {'form': form})
 
 
 
 def retour_emprunt(request):
+    # Étape 1 : Sélection de l'emprunteur
     if 'emprunteur_id' not in request.GET:
-        # Étape 1 : Sélection de l'emprunteur
         if request.method == 'POST':
             form = SelectEmprunteurForm(request.POST)
             if form.is_valid():
@@ -221,30 +240,49 @@ def retour_emprunt(request):
             form = SelectEmprunteurForm()
         return render(request, 'emprunt/select_emprunteur.html', {'form': form})
 
-    # Étape 2 : Gestion des emprunts pour l'emprunteur sélectionné
+    # Étape 2 : Affichage des emprunts pour le membre sélectionné
     emprunteur_id = request.GET.get('emprunteur_id')
     emprunteur = get_object_or_404(Membre, id=emprunteur_id)
     emprunts = Emprunt.objects.filter(emprunteur=emprunteur, date_retour_effective__isnull=True)
 
-    if request.method == 'POST':
-        form = RetourEmpruntForm(request.POST)
-        if form.is_valid():
-            # Sauvegarde l'emprunt retourné
-            emprunt = form.save()
+    # Étape 3 : Gestion du retour d'un emprunt spécifique
+    if 'emprunt_id' in request.GET:
+        emprunt_id = request.GET.get('emprunt_id')
+        emprunt = get_object_or_404(Emprunt, id=emprunt_id)
 
-            # Mettre à jour la disponibilité du média après le retour
-            media = emprunt.media # On récupère le média lié à l'emprunt
-            media.disponibility = True # Le média devient disponible
-            media.save() # On enregistre la modification
+        if request.method == 'POST':
+            form = RetourEmpruntForm(request.POST)
+            if form.is_valid():
+                # Mise à jour des données de l'emprunt
+                emprunt.date_retour_effective = form.cleaned_data['date_retour_effective']
+                # Sauvegarde les données de retour
+                emprunt.save()
 
-            # Rediriger après la mise à jour
-            return redirect(f"{request.path}?emprunteur_id={emprunteur.id}")
-    else:
-        forms = [RetourEmpruntForm(emprunt=emprunt) for emprunt in emprunts]
+                # Mise à jour de la disponibilité du média
+                emprunt.media.disponibility = True
+                emprunt.media.save()
 
+                # Message de succès et redirection vers la liste des emprunts
+                messages.success(request, f"Le retour de '{emprunt.media.name}' a été effectuée avec succès !")
+                return redirect(reverse('app_bibliothecaire:retour_emprunt') + f"?emprunteur_id={emprunteur.id}")
+
+        else:
+            form = RetourEmpruntForm(initial={
+                'emprunt_id': emprunt.id,
+                'media_name': emprunt.media.name,
+                'date_emprunt': emprunt.date_emprunt,
+                'date_retour_prevue': emprunt.date_retour_prevue,
+            })
+
+        return render(request, 'emprunt/retour_emprunt_detail.html', {
+            'emprunt': emprunt,
+            'form': form
+        })
+
+    # Affichage de la liste des emprunts pour le membre sélectionné
     return render(request, 'emprunt/retour_emprunt.html', {
         'emprunteur': emprunteur,
-        'forms': forms
+        'emprunts': emprunts
     })
 
 
