@@ -15,25 +15,28 @@ def home_bibliothecaire(request):
 
 # Fonctionnalités : Membre
 def listemembres(request):
-    #La variable membres récupère tous les objets de la table Membre dans la BDD
+    # La variable membres récupère tous les objets de la table Membre dans la BDD
     membres = Membre.objects.all()
-    #La fonction render() est utilisée pr renvoyer une réponse HTTP ac un template HTML ici : 'membres/listmembres.html'
-    #La clé 'membres' devient une variable accessible dans le template
-    #membres est une valeur associée à cette clé, c'est la liste des objets Membre récupérés
+    for membre in membres:
+        # Filtre les emprunts en cours pour chaque membre
+        membre.emprunts_en_cours = Emprunt.objects.filter(emprunteur=membre, date_retour_effective__isnull=True)
+    # La fonction render() est utilisée pr renvoyer une réponse HTTP ac un template HTML ici : 'membres/listmembres.html'
+    # La clé 'membres' devient une variable accessible dans le template
+    # membres est une valeur associée à cette clé, c'est la liste des objets Membre récupérés
     return render(request, 'membres/listmembres.html', {'membres': membres})
 
 
 def ajoutmembre(request):
-    #Vérification de la méthode HTTP : si POST le formulaire a été soumis sinon l'afficher pour le remplir
+    # Vérification de la méthode HTTP : si POST le formulaire a été soumis sinon l'afficher pour le remplir
     if request.method == 'POST':
-        #Création d'une instance du formulaire avec les données envoyées par l'utilisateur via le formulaire
+        # Création d'une instance du formulaire avec les données envoyées par l'utilisateur via le formulaire
         creationmembre = Creationmembre(request.POST)
-        #Vérifie que toutes les contraintes du formulaire sont respectées
+        # Vérifie que toutes les contraintes du formulaire sont respectées
         if creationmembre.is_valid():
-            #Si le formulaire est valide, une instance vide du modèle Membre est créée
+            # Si le formulaire est valide, une instance vide du modèle Membre est créée
             membre = Membre()
-            #Les données du formulaire sont récupérées à l'aide de creationmembre.cleaned_data qui contiennet les
-            #données valides
+            # Les données du formulaire sont récupérées à l'aide de creationmembre.cleaned_data qui contiennet les
+            # données valides
             membre.name = creationmembre.cleaned_data['name']
             membre.first_name = creationmembre.cleaned_data['first_name']
             membre.email = creationmembre.cleaned_data['email']
