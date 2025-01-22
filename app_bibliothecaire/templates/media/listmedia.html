@@ -84,6 +84,11 @@
           <p>Nom du jeu : {{ plateau.name }}</p>
           <p>Créateur : {{ plateau.auteur }}</p>
           <p>Nombre de joueurs : de {{ plateau.nombre_joueurs_min }} à {{ plateau.nombre_joueurs_max}} joueurs</p>
+          <p style="color: red; font-weight: bold;">Les jeux de plateaux ne sont pas disponibles à l'emprunt.</p>
+          <form action="{% url 'app_bibliothecaire:deletemedia' id=plateau.id %}" method="POST" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit">Supprimer</button>
+          </form>
         </li><br>
       {% endfor %}
     </ul>

@@ -179,6 +179,7 @@ class PlateauForm(forms.Form):
         required=False,
         initial=False,
         label="Disponible",
+        widget=forms.CheckboxInput(attrs={'disabled': 'disabled'})
     )
     categorie = forms.ChoiceField(
         choices=CATEGORIES_CHOICES,
