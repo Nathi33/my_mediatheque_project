@@ -6,6 +6,9 @@
 </head>
 <body>
     <h1>Page d'accueil pour les bibliothécaires !</h1>
+
+    <p>Vous êtes connecté en tant que {{ user.username }}</p>
+
     <ul>
         <li><a href="{% url 'app_bibliothecaire:listmembres' %}">Liste des membres</a></li>
         <li><a href="{% url 'app_bibliothecaire:ajoutmembre' %}">Création d'un membre</a></li>
@@ -18,8 +21,12 @@
         <li><a href="{% url 'app_bibliothecaire:creer_emprunt' %}">Création d'un emprunt</a></li>
         <li><a href="{% url 'app_bibliothecaire:retour_emprunt' %}">Retour d'un emprunt</a></li>
     </ul>
+
     <button>
       <a href="{% url 'home' %}">Retour au menu principal</a>
+    </button>
+    <button>
+        <a href="{% url 'logout' %}">Se déconnecter</a>
     </button>
 </body>
 </html>

@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from app_bibliothecaire.models import Membre, Livre, Dvd, Cd, Plateau, Emprunt, Media
 from app_bibliothecaire.forms import (Creationmembre, Updatemembre, LivreForm, DvdForm,
@@ -9,6 +10,7 @@ from datetime import timedelta
 
 
 # Fonctionnalité : Menu principal
+@login_required
 def home_bibliothecaire(request):
     return render(request, 'app_biblio/home_bibliothecaire.html')
 

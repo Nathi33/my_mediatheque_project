@@ -125,3 +125,12 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Redirection après connexion réussie
+LOGIN_REDIRECT_URL = '/bibliothecaire/'
+
+# Redirection après déconnexion
+LOGOUT_REDIRECT_URL = '/'
+
+# URL de connexion par défaut pour protéger les vues
+LOGIN_URL = '/login/'
