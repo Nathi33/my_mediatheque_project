@@ -5,5 +5,5 @@ app_name = 'app_membre'
 
 urlpatterns = [
     path('', views.home_membre, name='home_membre'),
-    path('liste_medias/', views.liste_medias, name='liste_medias'),
+    path('liste_medias_membre/', views.liste_medias_membre, name='liste_medias_membre'),
 ]

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des Médias - Membre</title>
+</head>
+<body>
+    <a href="{% url 'app_membre:home_membre' %}">Retour au menu</a>
+    <h1>Liste des Médias</h1>
+
+    <h2>Livres</h2>
+    <ul>
+        {% for livre in livres %}
+        <li>
+          <p>Titre : {{ livre.name }}</p>
+          <p>Auteur : {{ livre.auteur }}</p>
+          <p>Nombre de pages : {{ livre.nb_pages }}</p>
+          {% if livre.emprunt_en_cours %}
+            <p style="color:red;">Média déjà en cours d'emprunt</p>
+          {% else %}
+            <p>Disponible à l'emprunt</p>
+          {% endif %}
+        </li><br>
+        {% endfor %}
+    </ul>
+
+    <h2>DVD</h2>
+    <ul>
+        {% for dvd in dvds %}
+        <li>
+          <p>Titre : {{ dvd.name }}</p>
+          <p>Réalisateur : {{ dvd.auteur }}</p>
+          <p>Genre : {{ dvd.genre }}</p>
+          {% if dvd.emprunt_en_cours %}
+            <p style="color:red;">Média déjà est cours d'emprunt</p>
+          {% else %}
+            <p>Disponible à l'emprunt</p>
+          {% endif %}
+        </li><br>
+        {% endfor %}
+    </ul>
+
+    <h2>CD</h2>
+    <ul>
+        {% for cd in cds %}
+        <li>
+          <p>Titre : {{ cd.name }}</p>
+          <p>Artiste : {{ cd.auteur }}</p>
+          <p>Date de sortie : {{ cd.date_sortie }}</p>
+          {% if cd.emprunt_en_cours %}
+            <p style="color:red;">Média déjà en cours d'emprunt</p>
+          {% else %}
+            <p>Disponible à l'emprunt</p>
+          {% endif %}
+        </li><br>
+        {% endfor %}
+    </ul>
+
+    <h2>Jeux de plateau</h2>
+    <ul>
+        {% for plateau in plateaux %}
+        <li>
+          <p>Nom du jeu : {{ plateau.name }}</p>
+          <p>Créateur : {{ plateau.auteur }}</p>
+          <p>Nombre de joueurs : de {{ plateau.nombre_joueurs_min }} à {{ plateau.nombre_joueurs_max}} joueurs</p>
+          <p style="color: red; font-weight: bold;">Les jeux de plateaux ne sont pas disponibles à l'emprunt.</p>
+        </li><br>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>
