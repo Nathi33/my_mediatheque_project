@@ -56,7 +56,9 @@
                 <p>Média : {{ emprunt.media.name }}</p>
                 <p>Date d'emprunt : {{ emprunt.date_emprunt|date:"d F Y" }}</p>
                 <p>Date de retour prévue : {{ emprunt.date_retour_prevue|date:"d F Y" }}</p>
-                <p>Status : {% if emprunt.date_retour_effective %} Retour effectué le {{ emprunt.date_retour_effective|date:"d F Y" }} {% else %} En cours {% endif %}</p>
+                <p>Status : {% if emprunt.date_retour_effective %}
+                    Retour effectué le {{ emprunt.date_retour_effective|date:"d F Y" }}
+                    {% else %} En cours {% endif %}</p>
             </li>
             {% empty %}
             <p>Aucun emprunt en cours.</p>
