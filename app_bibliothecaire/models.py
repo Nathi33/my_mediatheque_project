@@ -77,44 +77,66 @@ class Emprunt(models.Model):
     date_retour_prevue = models.DateField(default=get_default_date_emprunt)
     date_retour_effective = models.DateField(null=True, blank=True)
 
-    def save(self, *args, **kwargs):
-        # Si c'est un retour (date_retour_effective non nulle)
-        if self.date_retour_effective:
-            # Marque le média comme disponible lors du retour
-            self.media.disponibility = True
-            self.media.save()
-        else:
-            #Vérifie que le média n'est pas un plateau de jeu
-            if isinstance(self.media, Plateau):
-                raise ValueError("les Plateaux de jeux ne peuvent pas être empruntés.")
-
-            #Vérifie que le membre n'a pas 3 emprunts actifs
-            emprunts_actifs = Emprunt.objects.filter(
-                emprunteur=self.emprunteur,
-                date_retour_effective__isnull=True
-            ).count()
-            if emprunts_actifs >= 3:
-                raise ValueError(f"{self.emprunteur} a déjà 3 emprunts actifs.")
-
-            #Vérifie si le membre a des emprunts en retard
-            emprunts_en_retard = Emprunt.objects.filter(
-                emprunteur=self.emprunteur,
-                date_retour_effective__isnull=True,
-                date_retour_prevue__lt=now().date()
-            )
-            if emprunts_en_retard.exists():
-                raise ValueError(f"{self.emprunteur} a des emprunts en retard et ne peut pas emprunter de nouveaux médias.")
-
-            #Vérifie que le média est disponible
-            if not self.media.disponibility:
-                raise ValueError(f"{self.media.name} n'est pas disponible à l'emprunt.")
-
-            #Marque le média comme non disponible
-            self.media.disponibility = False
-            self.media.save()
-
-        super().save(*args, **kwargs)
-
+    # Représentation textuelle d'un objet
     def __str__(self):
+        # f indique qu'il s'agit d'une f-string (manière de formater du texte en Python)
+        # self.media représente la relation entre l'emprunt et le média via la clé étrangère ForeignKey
+        # .name accède au champ name du modèle Media correspondant au nom du média emprunté
+        # self.emprunteur renvoie la représentation textuelle de l'emprunteur définit dans la méthode __str__ du modèle Membre
         return f"{self.media.name} emprunté par {self.emprunteur}"
+
+    def verifier_nblimite_emprunts(self):
+        # Emprunt.objects.filter(...) : requête filtrant les objets Emprunt remplissant certaines conditions
+        emprunts_actifs = Emprunt.objects.filter(
+            # Sélection uniquement des emprunts associés à l'emprunteur actuel
+            emprunteur=self.emprunteur,
+            # Filtre uniquement les emprunts n'ayant pas encore de date de retour effective
+            date_retour_effective__isnull=True
+        # Cette méthode comte le nombre d'éléments retournés par la requête
+        ).count()
+        # Si le nb d'emprunts est > ou = à 3
+        if emprunts_actifs >= 3:
+            # Si le membre a atteint ou dépassé la limite de 3 emprunts actifs alors une exception ValueError est levée
+                # et un message d'erreur apparait indiquant le problème.
+            # Une exception est un mécanisme interrompant l'exécution normale d'un programme
+                # lorsqu'un évènement inattendu se produit
+            raise ValueError(f"{self.emprunteur} a déjà 3 emprunts actifs")
+
+    # Vérifie si le membre a des emprunts en retard
+    def verifier_emprunts_en_retard(self):
+        emprunts_en_retard = Emprunt.objects.filter(
+            emprunteur=self.emprunteur,
+            # Vérifie que le média n'a pas encore été rendu
+            date_retour_effective__isnull=True,
+            # Compare la date de retour prévue et la date actuelle
+                # now().date() récupère la date du jour
+                # lt signifie inférieur à
+            date_retour_prevue__lt=now().date()
+        )
+        if emprunts_en_retard.exists():
+            raise ValueError(f"{self.emprunteur} a des emprunts en retard et ne peut paas emprunter de nouveaux médias.")
+
+    def verifier_disponibilite_media(self):
+        if not self.media.disponibility:
+            raise ValueError(f"{self.media.name} n'est pas disponible à l'emprunt.")
+
+    def marquer_media_comme_non_disponible(self):
+        self.media.disponibility=False
+        self.media.save()
+
+    def save(self, *args, **kwargs):
+        # self : fait référence à l'instance actuelle de l'objet du modèle
+        # *args : permet de passer un nombre variable d'arguments non nommés
+        # **kwargs : permet de passer un nombre variable d'arguments nommés
+        # Si c'est un retour
+        if self.date_retour_effective:
+            self.marquer_media_comme_disponible()
+        else:
+            # Vérification des règles avant d'enregistrer l'emprunt
+            self.verifier_disponibilite_media()
+            self.verifier_nblimite_emprunts()
+            self.verifier_emprunts_en_retard()
+            self.marquer_media_comme_non_disponible()
+        super().save(*args, **kwargs) # Appel de la méthode save() parente
+
 
