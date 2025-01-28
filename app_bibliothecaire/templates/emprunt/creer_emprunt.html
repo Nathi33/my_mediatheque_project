@@ -18,15 +18,15 @@
 
     <form method="post">
         {% csrf_token %}
-        {{ form.membre_id.label_tag }}<br>
-        {{ form.membre_id }}<br><br>
+        {{ form.member_id.label_tag }}<br>
+        {{ form.member_id }}<br><br>
 
 
         {{ form.media_id.label_tag }}<br>
         {{ form.media_id }}<br><br>
 
-        {{ form.date_emprunt.label_tag }}<br>
-        {{ form.date_emprunt }}<br><br>
+        {{ form.loan_date.label_tag }}<br>
+        {{ form.loan_date }}<br><br>
         <button type="submit">Enregistrer l'emprunt</button>
     </form>
 

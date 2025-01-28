@@ -1,30 +1,30 @@
 from django.shortcuts import render
-from app_bibliothecaire.models import Livre, Dvd, Cd, Plateau
+from app_bibliothecaire.models import Book, Dvd, Cd, Board
 
 
-def home_membre(request):
+def member_home(request):
     return render(request, 'app_memb/home_membre.html')
 
 
-def liste_medias_membre(request):
+def list_medias_member(request):
     # Recharge les médias depuis la BDD pour afficher l'état actuel
-    livres = Livre.objects.all()
+    books = Book.objects.all()
     dvds = Dvd.objects.all()
     cds = Cd.objects.all()
-    plateaux = Plateau.objects.all()
+    boards = Board.objects.all()
 
     # Permet la prise en compte d'un emprunt en cours
-    for livre in livres:
-        livre.emprunt_en_cours = livre.emprunts.filter(date_retour_effective__isnull=True).first()
+    for book in books:
+        book.current_loans = book.loans.filter(effective_return_date__isnull=True).first()
     for dvd in dvds:
-        dvd.emprunt_en_cours = dvd.emprunts.filter(date_retour_effective__isnull=True).first()
+        dvd.current_loans = dvd.loans.filter(effective_return_date__isnull=True).first()
     for cd in cds:
-        cd.emprunt_en_cours = cd.emprunts.filter(date_retour_effective__isnull=True).first()
+        cd.current_loans = cd.loans.filter(effective_return_date__isnull=True).first()
 
     context = {
-        'livres': livres,
+        'books': books,
         'dvds': dvds,
         'cds': cds,
-        'plateaux': plateaux,
+        'boards': boards,
     }
     return render(request, 'app_memb/liste_medias_membre.html', context)

@@ -3,7 +3,7 @@ from django.utils import timezone
 from datetime import timedelta
 
 
-class Membre(models.Model):
+class Member(models.Model):
     """ Modèle de base d'un Membre.
     Attributs :
         name (str) : Nom du membre.
@@ -29,31 +29,31 @@ class Media(models.Model):
     """ Modèle de base d'un Média.
     Attributs :
         name (str) : Nom du média.
-        auteur (str) : Auteur ou créateur du média.
+        author (str) : Auteur ou créateur du média.
         category (str) : Catégorie du média (choix parmi 'livre', 'dvd', 'cd', 'plateau').
-        disponibility (bool) : Indique si le média est disponible pour l'emprunt.
-        emprunteur (Membre) : Référence vers le membre ayant emprunté ce média.
-        date_emprunt (datetime) : Date de l'emprunt.
+        availability (bool) : Indique si le média est disponible pour l'emprunt.
+        borrower (Member) : Référence vers le membre ayant emprunté ce média.
+        loan_date (datetime) : Date de l'emprunt.
     """
 
     CATEGORY_CHOICES = [
-        ('livre', 'Livre'),
+        ('book', 'Book'),
         ('dvd', 'Dvd'),
         ('cd', 'Cd'),
-        ('plateau', 'Plateau'),
+        ('board', 'Board'),
     ]
     name = models.fields.CharField(max_length=150)
-    auteur = models.fields.CharField(max_length=250)
-    category = models.CharField(max_length=10, choices=CATEGORY_CHOICES, default='livre')
-    disponibility = models.BooleanField(default=True)
-    emprunteur = models.ForeignKey(Membre, null=True, blank=True, on_delete=models.SET_NULL)
-    date_emprunt = models.DateTimeField(null=True, blank=True)
+    author = models.fields.CharField(max_length=250)
+    category = models.CharField(max_length=10, choices=CATEGORY_CHOICES, default='book')
+    availability = models.BooleanField(default=True)
+    borrower = models.ForeignKey(Member, null=True, blank=True, on_delete=models.SET_NULL)
+    loan_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.name
 
 
-class Livre(Media):
+class Book(Media):
     """ Modèle de base d'un livre.
     Attributs supplémentaires :
         nb_pages (int) : Nombre de pages du livre.
@@ -66,81 +66,81 @@ class Dvd(Media):
 
 
 class Cd(Media):
-    date_sortie = models.DateField(null=True, blank=True)
+    release_date = models.DateField(null=True, blank=True)
 
 
-class Plateau(Media):
-    nombre_joueurs_min = models.IntegerField(null=True, blank=True)
-    nombre_joueurs_max = models.IntegerField(null=True, blank=True)
+class Board(Media):
+    number_players_min = models.IntegerField(null=True, blank=True)
+    number_players_max = models.IntegerField(null=True, blank=True)
 
 
-def get_default_date_emprunt():
+def get_default_loan_date():
     # Calcule la date de retour prévue en fonction de la date d'emprunt
     return timezone.now().date() + timedelta(days=7)
 
 
-class Emprunt(models.Model):
+class Loan(models.Model):
     """ Modèle de base de l'emprunt d'un média par un membre.
     Attributs :
-        emprunteur (Membre) : Référence vers le membre qui emprunte.
+        borrower (Member) : Référence vers le membre qui emprunte.
         media (Media) : Référence vers le média emprunté.
-        date_emprunt (datetime) : Date de l'emprunt.
-        date_retour_prevue (date) : Date prévue pour le retour.
-        date_retour_effective (date) : Date réelle du retour.
+        loan_date (datetime) : Date de l'emprunt.
+        expected_return_date (date) : Date prévue pour le retour.
+        effective_return_date (date) : Date réelle du retour.
     """
-    emprunteur = models.ForeignKey(
-        Membre,
+    borrower = models.ForeignKey(
+        Member,
         on_delete=models.CASCADE,
-        related_name="emprunts"
+        related_name="loans"
     )
     media = models.ForeignKey(
         Media,
         on_delete=models.CASCADE,
-        related_name="emprunts"
+        related_name="loans"
     )
-    date_emprunt = models.DateTimeField(null=True, blank=True)
-    date_retour_prevue = models.DateField(default=get_default_date_emprunt)
-    date_retour_effective = models.DateField(null=True, blank=True)
+    loan_date = models.DateTimeField(null=True, blank=True)
+    expected_return_date = models.DateField(default=get_default_loan_date)
+    effective_return_date = models.DateField(null=True, blank=True)
 
     def __str__(self):
-        return f"{self.media.name} emprunté par {self.emprunteur}"
+        return f"{self.media.name} emprunté par {self.borrower}"
 
-    def verifier_nblimite_emprunts(self):
+    def check_borrowing_limit(self):
         """ Vérifie si le membre a atteint la limite de 3 emprunts actifs
         et
         lève une exception ValueError si la limite est atteinte.
         """
-        emprunts_actifs = Emprunt.objects.filter(
-            emprunteur=self.emprunteur,
-            date_retour_effective__isnull=True
+        active_loans = Loan.objects.filter(
+            borrower=self.borrower,
+            effective_return_date__isnull=True
         ).count()
-        if emprunts_actifs >= 3:
-            raise ValueError(f"{self.emprunteur} a déjà 3 emprunts actifs")
+        if active_loans >= 3:
+            raise ValueError(f"{self.borrower} a déjà 3 emprunts actifs")
 
-    def verifier_emprunts_en_retard(self):
+    def check_late_loans(self):
         """ Vérifie si le membre a des emprunts en retard
         et
         lève une exception ValueError si un retard est détecté.
         """
-        emprunts_en_retard = Emprunt.objects.filter(
-            emprunteur=self.emprunteur,
-            date_retour_effective__isnull=True,
-            date_retour_prevue__lt=timezone.now().date()
+        late_loans = Loan.objects.filter(
+            borrower=self.borrower,
+            effective_return_date__isnull=True,
+            expected_return_date__lt=timezone.now().date()
         )
-        if emprunts_en_retard.exists():
+        if late_loans.exists():
             raise ValueError(
-                f"{self.emprunteur} a des emprunts en retard et ne peut paas emprunter de nouveaux médias.")
+                f"{self.borrower} a des emprunts en retard et ne peut paas emprunter de nouveaux médias.")
 
-    def verifier_disponibilite_media(self):
-        if not self.media.disponibility:
+    def check_availability_media(self):
+        if not self.media.availability:
             raise ValueError(f"{self.media.name} n'est pas disponible à l'emprunt.")
 
-    def marquer_media_comme_disponible(self):
-        self.media.disponibility = True
+    def mark_media_as_available(self):
+        self.media.availability = True
         self.media.save()
 
-    def marquer_media_comme_non_disponible(self):
-        self.media.disponibility = False
+    def mark_media_as_unavailable(self):
+        self.media.availability = False
         self.media.save()
 
     def save(self, *args, **kwargs):
@@ -149,15 +149,15 @@ class Emprunt(models.Model):
                 - Vérifie la disponibilité du média.
                 - Marque le média comme non disponible si l'emprunt est actif.
         """
-        if self.date_retour_effective:
-            self.marquer_media_comme_disponible()
+        if self.effective_return_date:
+            self.mark_media_as_available()
         else:
-            self.verifier_disponibilite_media()
-            self.verifier_nblimite_emprunts()
-            self.verifier_emprunts_en_retard()
-            if not self.date_emprunt:
-                self.date_emprunt = timezone.now().date()
-            if not self.date_retour_prevue:
-                self.date_retour_prevue = self.date_emprunt + timedelta(days=7)
-            self.marquer_media_comme_non_disponible()
+            self.check_availability_media()
+            self.check_borrowing_limit()
+            self.check_late_loans()
+            if not self.loan_date:
+                self.loan_date = timezone.now().date()
+            if not self.expected_return_date:
+                self.expected_return_date = self.loan_date + timedelta(days=7)
+            self.mark_media_as_unavailable()
         super().save(*args, **kwargs)

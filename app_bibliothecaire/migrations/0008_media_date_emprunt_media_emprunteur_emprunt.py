@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('date_emprunt', models.DateTimeField(auto_now_add=True)),
-                ('date_retour_prevue', models.DateField(default=app_bibliothecaire.models.get_default_date_emprunt)),
+                ('date_retour_prevue', models.DateField(default=app_bibliothecaire.models.get_default_loan_date)),
                 ('date_retour_effective', models.DateField(blank=True, null=True)),
                 ('emprunteur', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='emprunts', to='app_bibliothecaire.membre')),
                 ('media', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='emprunts', to='app_bibliothecaire.media')),

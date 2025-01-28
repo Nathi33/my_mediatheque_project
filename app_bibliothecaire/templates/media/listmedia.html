@@ -10,20 +10,20 @@
 
     <h2>Livres</h2>
     <ul>
-        {% for livre in livres %}
+        {% for book in books %}
         <li>
-          <p>Titre : {{ livre.name }}</p>
-          <p>Auteur : {{ livre.auteur }}</p>
-          <p>Nombre de pages : {{ livre.nb_pages }}</p>
-          {% if livre.emprunt_en_cours %}
-            <p>Emprunté par {{ livre.emprunt_en_cours.emprunteur.name }}
-                {{ livre.emprunt_en_cours.emprunteur.first_name }}
-                le {{ livre.emprunt_en_cours.date_emprunt|date:"d/m/Y" }}</p>
-            <p>Date de retour prévue avant le {{ livre.emprunt_en_cours.date_retour_prevue|date:"d/m/Y" }}</p>
+          <p>Titre : {{ book.name }}</p>
+          <p>Auteur : {{ book.author }}</p>
+          <p>Nombre de pages : {{ book.nb_pages }}</p>
+          {% if book.current_loans %}
+            <p>Emprunté par {{ book.current_loans.borrower.name }}
+                {{ book.current_loans.borrower.first_name }}
+                le {{ book.current_loans.loan_date|date:"d/m/Y" }}</p>
+            <p>Date de retour prévue avant le {{ book.current_loans.expected_return_date|date:"d/m/Y" }}</p>
           {% else %}
             <p>Disponible à l'emprunt</p>
           {% endif %}
-          <form action="{% url 'app_bibliothecaire:deletemedia' id=livre.id %}" method="POST" style="display:inline;">
+          <form action="{% url 'app_bibliothecaire:deletemedia' id=book.id %}" method="POST" style="display:inline;">
                 {% csrf_token %}
                 <button type="submit">Supprimer</button>
           </form>
@@ -36,13 +36,13 @@
         {% for dvd in dvds %}
         <li>
           <p>Titre : {{ dvd.name }}</p>
-          <p>Réalisateur : {{ dvd.auteur }}</p>
+          <p>Réalisateur : {{ dvd.author }}</p>
           <p>Genre : {{ dvd.genre }}</p>
-          {% if dvd.emprunt_en_cours %}
-            <p>Emprunté par {{ dvd.emprunt_en_cours.emprunteur.name }}
-                {{ dvd.emprunt_en_cours.emprunteur.first_name }}
-                le {{ dvd.emprunt_en_cours.date_emprunt|date:"d/m/Y" }}</p>
-            <p>Date de retour prévue avant le {{ dvd.emprunt_en_cours.date_retour_prevue|date:"d/m/Y" }}</p>
+          {% if dvd.current_loans %}
+            <p>Emprunté par {{ dvd.current_loans.borrower.name }}
+                {{ dvd.current_loans.boorower.first_name }}
+                le {{ dvd.current_loans.loan_date|date:"d/m/Y" }}</p>
+            <p>Date de retour prévue avant le {{ dvd.current_loans.expected_return_date|date:"d/m/Y" }}</p>
           {% else %}
             <p>Disponible à l'emprunt</p>
           {% endif %}
@@ -59,13 +59,13 @@
         {% for cd in cds %}
         <li>
           <p>Titre : {{ cd.name }}</p>
-          <p>Artiste : {{ cd.auteur }}</p>
-          <p>Date de sortie : {{ cd.date_sortie }}</p>
-          {% if cd.emprunt_en_cours %}
-            <p>Emprunté par {{ cd.emprunt_en_cours.emprunteur.name }}
-                {{ cd.emprunt_en_cours.emprunteur.first_name }}
-                le {{ cd.emprunt_en_cours.date_emprunt|date:"d/m/Y" }}</p>
-            <p>Date de retour prévue avant le {{ cd.emprunt_en_cours.date_retour_prevue|date:"d/m/Y" }}</p>
+          <p>Artiste : {{ cd.author }}</p>
+          <p>Date de sortie : {{ cd.release_date }}</p>
+          {% if cd.current_loans %}
+            <p>Emprunté par {{ cd.current_loans.borrower.name }}
+                {{ cd.current_loans.borrower.first_name }}
+                le {{ cd.current_loans.loan_date|date:"d/m/Y" }}</p>
+            <p>Date de retour prévue avant le {{ cd.current_loans.expected_return_date|date:"d/m/Y" }}</p>
           {% else %}
             <p>Disponible à l'emprunt</p>
           {% endif %}
@@ -79,13 +79,13 @@
 
     <h2>Jeux de plateau</h2>
     <ul>
-        {% for plateau in plateaux %}
+        {% for board in boards %}
         <li>
-          <p>Nom du jeu : {{ plateau.name }}</p>
-          <p>Créateur : {{ plateau.auteur }}</p>
-          <p>Nombre de joueurs : de {{ plateau.nombre_joueurs_min }} à {{ plateau.nombre_joueurs_max}} joueurs</p>
+          <p>Nom du jeu : {{ board.name }}</p>
+          <p>Créateur : {{ board.author }}</p>
+          <p>Nombre de joueurs : de {{ board.number_players_min }} à {{ board.number_players_max}} joueurs</p>
           <p style="color: red; font-weight: bold;">Les jeux de plateaux ne sont pas disponibles à l'emprunt.</p>
-          <form action="{% url 'app_bibliothecaire:deletemedia' id=plateau.id %}" method="POST" style="display:inline;">
+          <form action="{% url 'app_bibliothecaire:deletemedia' id=board.id %}" method="POST" style="display:inline;">
                 {% csrf_token %}
                 <button type="submit">Supprimer</button>
           </form>

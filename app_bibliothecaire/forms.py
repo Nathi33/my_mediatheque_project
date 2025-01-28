@@ -1,10 +1,10 @@
 from django import forms
-from .models import Membre, Media, Emprunt
+from .models import Member, Media, Loan
 from django.core.exceptions import ValidationError
 from datetime import datetime
 
 
-class Creationmembre(forms.Form):
+class Membercreation(forms.Form):
     name = forms.CharField(
         max_length=150,
         required=True,
@@ -26,7 +26,7 @@ class Creationmembre(forms.Form):
     )
 
 
-class Updatemembre(forms.Form):
+class Memberupdate(forms.Form):
     name = forms.CharField(
         max_length=150,
         required=False,
@@ -48,24 +48,24 @@ class Updatemembre(forms.Form):
     )
 
 
-class LivreForm(forms.Form):
+class BookForm(forms.Form):
     CATEGORIES_CHOICES = [
-        ('livre', 'Livres'),
+        ('book', 'Books'),
         ('dvd', 'Dvd'),
         ('cd', 'Cd'),
-        ('plateau', 'Plateau'),
+        ('board', 'Board'),
     ]
     name = forms.CharField(
         max_length=150,
         required=True,
         label="Titre",
     )
-    auteur = forms.CharField(
+    author = forms.CharField(
         max_length=250,
         required=True,
         label="Auteur",
     )
-    disponibility = forms.BooleanField(
+    availability = forms.BooleanField(
         initial=True,
         required=True,
         label="Disponible",
@@ -78,28 +78,28 @@ class LivreForm(forms.Form):
         choices=CATEGORIES_CHOICES,
         label="Catégorie",
         required=False,
-        initial='livre',
+        initial='book',
     )
 
 
 class DvdForm(forms.Form):
     CATEGORIES_CHOICES = [
-        ('livre', 'Livres'),
+        ('book', 'Books'),
         ('dvd', 'Dvd'),
         ('cd', 'Cd'),
-        ('plateau', 'Plateau'),
+        ('board', 'Board'),
     ]
     name = forms.CharField(
         max_length=150,
         required=True,
         label="Titre",
     )
-    auteur = forms.CharField(
+    author = forms.CharField(
         max_length=250,
         required=True,
         label="Réalisateur",
     )
-    disponibility = forms.BooleanField(
+    availability = forms.BooleanField(
         initial=True,
         required=True,
         label="Disponible",
@@ -118,27 +118,27 @@ class DvdForm(forms.Form):
 
 class CdForm(forms.Form):
     CATEGORIES_CHOICES = [
-        ('livre', 'Livres'),
+        ('book', 'Books'),
         ('dvd', 'Dvd'),
         ('cd', 'Cd'),
-        ('plateau', 'Plateau'),
+        ('board', 'Board'),
     ]
     name = forms.CharField(
         max_length=150,
         required=True,
         label="Titre",
     )
-    auteur = forms.CharField(
+    author = forms.CharField(
         max_length=250,
         required=True,
         label="Artiste",
     )
-    disponibility = forms.BooleanField(
+    availability = forms.BooleanField(
         initial=True,
         required=True,
         label="Disponible",
     )
-    date_sortie = forms.DateField(
+    release_date = forms.DateField(
         required=False,
         label="Date de sortie"
     )
@@ -150,32 +150,32 @@ class CdForm(forms.Form):
     )
 
 
-class PlateauForm(forms.Form):
+class BoardForm(forms.Form):
     CATEGORIES_CHOICES = [
-        ('livre', 'Livres'),
+        ('book', 'Books'),
         ('dvd', 'Dvd'),
         ('cd', 'Cd'),
-        ('plateau', 'Plateau'),
+        ('board', 'Board'),
     ]
     name = forms.CharField(
         max_length=150,
         required=True,
         label="Nom du jeu",
     )
-    auteur = forms.CharField(
+    author = forms.CharField(
         max_length=250,
         required=True,
         label="Créateur",
     )
-    nombre_joueurs_min = forms.IntegerField(
+    number_players_min = forms.IntegerField(
         required=False,
         label="Nombre de joueurs minimum",
     )
-    nombre_joueurs_max = forms.IntegerField(
+    number_players_max = forms.IntegerField(
         required=False,
         label="Nombre de joueurs maximum",
     )
-    disponibility = forms.BooleanField(
+    availability = forms.BooleanField(
         required=False,
         initial=False,
         label="Disponible",
@@ -185,25 +185,25 @@ class PlateauForm(forms.Form):
         choices=CATEGORIES_CHOICES,
         label="Catégorie",
         required=False,
-        initial='plateau',
+        initial='board',
     )
 
 
-class EmpruntForm(forms.Form):
+class LoanForm(forms.Form):
     CATEGORIES_CHOICES = [
         ('', ''),
-        ('livre', 'Livres'),
+        ('book', 'Books'),
         ('dvd', 'Dvd'),
         ('cd', 'Cd'),
-        ('plateau', 'Plateau')
+        ('board', 'Board')
     ]
     categorie = forms.ChoiceField(
         choices=CATEGORIES_CHOICES,
         label="Sélectionner une catégorie",
         required=False
     )
-    membre_id = forms.ModelChoiceField(
-        queryset=Membre.objects.all(),
+    member_id = forms.ModelChoiceField(
+        queryset=Member.objects.all(),
         label="Sélectionner un membre",
     )
     media_id = forms.ModelChoiceField(
@@ -211,7 +211,7 @@ class EmpruntForm(forms.Form):
         label="Sélectionner un média",
         required=False
     )
-    date_emprunt = forms.DateTimeField(
+    loan_date = forms.DateTimeField(
         label="Date de l'emprunt",
         required=True,
         widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
@@ -224,35 +224,35 @@ class EmpruntForm(forms.Form):
 
         # Si une catégorie est renseignée, on filtre les médias par cette catégorie
         if categorie:
-            self.fields['media_id'].queryset = Media.objects.filter(category=categorie, disponibility=True)
+            self.fields['media_id'].queryset = Media.objects.filter(category=categorie, availability=True)
         else:
-            self.fields['media_id'].queryset = Media.objects.filter(disponibility=True)
+            self.fields['media_id'].queryset = Media.objects.filter(availability=True)
 
-    def clean_date_emprunt(self):
-        date_emprunt = self.cleaned_data['date_emprunt']
+    def clean_loan_date(self):
+        loan_date = self.cleaned_data['loan_date']
         # Convertir en date uniquement si c'est un datetime
-        if isinstance(date_emprunt, datetime):
-            date_emprunt = date_emprunt.date()
+        if isinstance(loan_date, datetime):
+            loan_date = loan_date.date()
         # Vérifie si la date est valide, même si elle est passée
-        if date_emprunt > datetime.today().date():
+        if loan_date > datetime.today().date():
             raise forms.ValidationError("La date d'emprunt ne peut pas être dans le futur.")
-        return date_emprunt
+        return loan_date
 
 
-class SelectEmprunteurForm(forms.Form):
-    emprunteur = forms.ModelChoiceField(
-        queryset=Membre.objects.all(),
+class SelectBorrowerForm(forms.Form):
+    borrower = forms.ModelChoiceField(
+        queryset=Member.objects.all(),
         label="Sélectionner un emprunteur",
         widget=forms.Select
     )
 
 
-class RetourEmpruntForm(forms.Form):
-    emprunt_id = forms.IntegerField(widget=forms.HiddenInput)
+class ReturnLoanForm(forms.Form):
+    loan_id = forms.IntegerField(widget=forms.HiddenInput)
     media_name = forms.CharField(label="Nom du média", required=False, disabled=True)
-    date_emprunt = forms.DateField(label="Date d'emprunt", required=False, disabled=True)
-    date_retour_prevue = forms.DateField(label="Date de retour prévue", required=False, disabled=True)
-    date_retour_effective = forms.DateTimeField(
+    loan_date = forms.DateField(label="Date d'emprunt", required=False, disabled=True)
+    expected_return_date = forms.DateField(label="Date de retour prévue", required=False, disabled=True)
+    effective_return_date = forms.DateTimeField(
         label="Date de retour effective",
         required=True,
         widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
@@ -260,47 +260,47 @@ class RetourEmpruntForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        emprunt = kwargs.pop('emprunt', None)
+        loan = kwargs.pop('loan', None)
         super().__init__(*args, **kwargs)
-        if emprunt:
-            self.fields['emprunt_id'].initial = emprunt.id
-            self.fields['media_name'].initial = emprunt.media.name
-            self.fields['date_emprunt'].initial = emprunt.date_emprunt
-            self.fields['date_retour_prevue'].initial = emprunt.date_retour_prevue
+        if loan:
+            self.fields['loan_id'].initial = loan.id
+            self.fields['media_name'].initial = loan.media.name
+            self.fields['loan_date'].initial =loan.loan_date
+            self.fields['expected_return_date'].initial = loan.expected_return_date
 
-    def clean_date_retour_effective(self):
+    def clean_effective_return_date(self):
         # Validation de la date de retour effective
-        date_retour_effective = self.cleaned_data['date_retour_effective']
-        emprunt_id = self.cleaned_data.get('emprunt_id')
+        effective_return_date = self.cleaned_data['effective_return_date']
+        loan_id = self.cleaned_data.get('loan_id')
         try:
-            emprunt = Emprunt.objects.get(id=emprunt_id)
-        except Emprunt.DoesNotExist:
+            loan = Loan.objects.get(id=loan_id)
+        except Loan.DoesNotExist:
             raise ValidationError("L'emprunt sélectionné n'existe pas.")
 
         # Si date_retour_effective est un datetime, la convertir en date
-        if isinstance(date_retour_effective, datetime):
-            date_retour_effective = date_retour_effective.date()
+        if isinstance(effective_return_date, datetime):
+            effective_return_date = effective_return_date.date()
 
         # Vérifie que la date de retour effective est postérieure à la date d'emprunt
-        if date_retour_effective < emprunt.date_emprunt.date():
+        if effective_return_date < loan.loan_date.date():
             raise ValidationError("La date de retour effective ne peut pas être antérieure à la date d'emprunt.")
 
         # Vérifie si l'emprunt a déjà été retourné
-        if emprunt.date_retour_effective:
+        if loan.effective_return_date:
             raise ValidationError("Cet emprunt a déjà été retourné.")
 
-        return date_retour_effective
+        return effective_return_date
 
     def save(self):
         # Enregistre un retour d'emprunt
-        emprunt_id = self.cleaned_data['emprunt_id']
-        date_retour_effective = self.cleaned_data['date_retour_effective']
-        emprunt = Emprunt.objects.get(id=emprunt_id)
+        loan_id = self.cleaned_data['loan_id']
+        effective_return_date = self.cleaned_data['effective_return_date']
+        loan = Loan.objects.get(id=loan_id)
 
         # Mise à jour de la date de retour effective
-        emprunt.date_retour_effective = date_retour_effective
-        emprunt.media.disponibility = True  # Rend le média disponible après retour
-        emprunt.media.save()
-        emprunt.save()
+        loan.effective_return_date = effective_return_date
+        loan.media.availability = True  # Rend le média disponible après retour
+        loan.media.save()
+        loan.save()
 
-        return emprunt
+        return loan
