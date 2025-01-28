@@ -23,10 +23,13 @@
     </ul>
 
     <button>
-      <a href="{% url 'home' %}">Retour au menu principal</a>
+        <a href="{% url 'home' %}">Retour au menu principal</a>
     </button>
-    <button>
-        <a href="{% url 'logout' %}">Se déconnecter</a>
-    </button>
+    <br><br>
+
+    <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Se déconnecter</button>
+    </form>
 </body>
 </html>

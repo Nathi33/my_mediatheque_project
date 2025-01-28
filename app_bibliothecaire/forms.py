@@ -77,7 +77,7 @@ class LivreForm(forms.Form):
     categorie = forms.ChoiceField(
         choices=CATEGORIES_CHOICES,
         label="Catégorie",
-        required=False, # Permet de ne pas forcer la sélection
+        required=False,  # Permet de ne pas forcer la sélection
         initial='livre',
     )
 
@@ -188,6 +188,7 @@ class PlateauForm(forms.Form):
         initial='plateau',
     )
 
+
 class EmpruntForm(forms.Form):
     CATEGORIES_CHOICES = [
         ('', ''),
@@ -206,7 +207,7 @@ class EmpruntForm(forms.Form):
         label="Sélectionner un membre",
     )
     media_id = forms.ModelChoiceField(
-        queryset=Media.objects.none(), #Initialement vide
+        queryset=Media.objects.none(),  # Initialement vide
         label="Sélectionner un média",
         required=False
     )
@@ -216,7 +217,6 @@ class EmpruntForm(forms.Form):
         widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
         input_formats=['%Y-%m-%d']
     )
-
 
     def __init__(self, *args, **kwargs):
         categorie = kwargs.pop('categorie', None)  # Récupère la catégorie depuis la vue
@@ -259,7 +259,6 @@ class RetourEmpruntForm(forms.Form):
         input_formats=['%Y-%m-%d']
     )
 
-
     def __init__(self, *args, **kwargs):
         emprunt = kwargs.pop('emprunt', None)
         super().__init__(*args, **kwargs)
@@ -300,7 +299,7 @@ class RetourEmpruntForm(forms.Form):
 
         # Mise à jour de la date de retour effective
         emprunt.date_retour_effective = date_retour_effective
-        emprunt.media.disponibility = True # Rend le média disponible après retour
+        emprunt.media.disponibility = True  # Rend le média disponible après retour
         emprunt.media.save()
         emprunt.save()
 
