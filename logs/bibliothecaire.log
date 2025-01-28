@@ -1,3 +1,53 @@
 INFO 2025-01-28 11:59:19,265 autoreload Watching for file changes with StatReloader
 INFO 2025-01-28 11:59:47,369 autoreload Watching for file changes with StatReloader
 INFO 2025-01-28 11:59:49,733 basehttp "GET / HTTP/1.1" 200 352
+INFO 2025-01-28 12:08:53,144 autoreload Watching for file changes with StatReloader
+INFO 2025-01-28 12:08:53,241 views Accès à la page d'accueil du bibliothécaire.
+INFO 2025-01-28 12:08:53,248 basehttp "GET /bibliothecaire/ HTTP/1.1" 200 1131
+INFO 2025-01-28 12:09:04,616 views Accès à la liste des membres.
+INFO 2025-01-28 12:09:04,637 basehttp "GET /bibliothecaire/listmembres/ HTTP/1.1" 200 4940
+INFO 2025-01-28 12:09:19,985 views Tentative de suppression du membre avec ID : 3
+INFO 2025-01-28 12:09:20,001 views Membre supprimé avec succès : DOE John
+INFO 2025-01-28 12:09:20,011 basehttp "POST /bibliothecaire/deletemembre/3/ HTTP/1.1" 302 0
+INFO 2025-01-28 12:09:20,015 views Accès à la liste des membres.
+INFO 2025-01-28 12:09:20,035 basehttp "GET /bibliothecaire/listmembres/ HTTP/1.1" 200 4498
+INFO 2025-01-28 12:09:24,586 views Accès à la page d'accueil du bibliothécaire.
+INFO 2025-01-28 12:09:24,587 basehttp "GET /bibliothecaire/ HTTP/1.1" 200 1131
+INFO 2025-01-28 12:10:02,341 autoreload C:\Users\natha\python_venv\training_project\my_mediatheque_project\app_bibliothecaire\models.py changed, reloading.
+INFO 2025-01-28 12:10:02,836 autoreload Watching for file changes with StatReloader
+INFO 2025-01-28 12:11:44,017 autoreload C:\Users\natha\python_venv\training_project\my_mediatheque_project\app_bibliothecaire\models.py changed, reloading.
+INFO 2025-01-28 12:11:44,554 autoreload Watching for file changes with StatReloader
+INFO 2025-01-28 12:12:37,273 autoreload C:\Users\natha\python_venv\training_project\my_mediatheque_project\app_bibliothecaire\models.py changed, reloading.
+INFO 2025-01-28 12:12:37,701 autoreload Watching for file changes with StatReloader
+INFO 2025-01-28 12:14:24,992 autoreload C:\Users\natha\python_venv\training_project\my_mediatheque_project\app_bibliothecaire\models.py changed, reloading.
+INFO 2025-01-28 12:14:25,495 autoreload Watching for file changes with StatReloader
+INFO 2025-01-28 12:21:03,575 autoreload C:\Users\natha\python_venv\training_project\my_mediatheque_project\app_bibliothecaire\models.py changed, reloading.
+INFO 2025-01-28 12:21:04,066 autoreload Watching for file changes with StatReloader
+INFO 2025-01-28 12:23:03,739 autoreload C:\Users\natha\python_venv\training_project\my_mediatheque_project\app_bibliothecaire\models.py changed, reloading.
+INFO 2025-01-28 12:23:04,216 autoreload Watching for file changes with StatReloader
+INFO 2025-01-28 12:24:59,710 autoreload C:\Users\natha\python_venv\training_project\my_mediatheque_project\app_bibliothecaire\models.py changed, reloading.
+INFO 2025-01-28 12:25:00,138 autoreload Watching for file changes with StatReloader
+INFO 2025-01-28 12:30:46,842 autoreload C:\Users\natha\python_venv\training_project\my_mediatheque_project\app_bibliothecaire\models.py changed, reloading.
+INFO 2025-01-28 12:30:47,366 autoreload Watching for file changes with StatReloader
+INFO 2025-01-28 12:31:43,131 autoreload C:\Users\natha\python_venv\training_project\my_mediatheque_project\app_bibliothecaire\models.py changed, reloading.
+INFO 2025-01-28 12:31:43,574 autoreload Watching for file changes with StatReloader
+INFO 2025-01-28 12:32:55,449 autoreload C:\Users\natha\python_venv\training_project\my_mediatheque_project\app_bibliothecaire\models.py changed, reloading.
+INFO 2025-01-28 12:32:55,854 autoreload Watching for file changes with StatReloader
+INFO 2025-01-28 12:34:10,878 autoreload C:\Users\natha\python_venv\training_project\my_mediatheque_project\app_bibliothecaire\models.py changed, reloading.
+INFO 2025-01-28 12:34:11,304 autoreload Watching for file changes with StatReloader
+INFO 2025-01-28 12:35:13,132 autoreload C:\Users\natha\python_venv\training_project\my_mediatheque_project\app_bibliothecaire\models.py changed, reloading.
+INFO 2025-01-28 12:35:13,555 autoreload Watching for file changes with StatReloader
+INFO 2025-01-28 12:37:06,038 autoreload C:\Users\natha\python_venv\training_project\my_mediatheque_project\app_bibliothecaire\models.py changed, reloading.
+INFO 2025-01-28 12:37:06,462 autoreload Watching for file changes with StatReloader
+INFO 2025-01-28 12:40:56,345 autoreload C:\Users\natha\python_venv\training_project\my_mediatheque_project\app_bibliothecaire\views.py changed, reloading.
+INFO 2025-01-28 12:40:56,833 autoreload Watching for file changes with StatReloader
+INFO 2025-01-28 12:43:14,459 autoreload C:\Users\natha\python_venv\training_project\my_mediatheque_project\app_bibliothecaire\views.py changed, reloading.
+INFO 2025-01-28 12:43:15,096 autoreload Watching for file changes with StatReloader
+INFO 2025-01-28 12:46:32,375 autoreload C:\Users\natha\python_venv\training_project\my_mediatheque_project\app_bibliothecaire\views.py changed, reloading.
+INFO 2025-01-28 12:46:32,771 autoreload Watching for file changes with StatReloader
+INFO 2025-01-28 12:49:42,102 autoreload C:\Users\natha\python_venv\training_project\my_mediatheque_project\app_bibliothecaire\views.py changed, reloading.
+INFO 2025-01-28 12:49:42,582 autoreload Watching for file changes with StatReloader
+INFO 2025-01-28 12:51:48,441 autoreload C:\Users\natha\python_venv\training_project\my_mediatheque_project\app_bibliothecaire\views.py changed, reloading.
+INFO 2025-01-28 12:51:48,880 autoreload Watching for file changes with StatReloader
+INFO 2025-01-28 12:58:02,761 autoreload C:\Users\natha\python_venv\training_project\my_mediatheque_project\app_bibliothecaire\forms.py changed, reloading.
+INFO 2025-01-28 12:58:03,171 autoreload Watching for file changes with StatReloader
