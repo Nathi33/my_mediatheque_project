@@ -9,7 +9,7 @@
     <p>Ajouter un membre !</p>
     <form method="post">
         {% csrf_token %}
-        {{creationMembre.as_p}}
+        {{memberCreation.as_p}}
         <button type="submit">Enregistrer</button>
     </form>
 </body>

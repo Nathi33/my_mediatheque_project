@@ -33,29 +33,29 @@
 
     <ul>
       <!-- Boucle pour afficher tous les membres à travers la balise <li>  -->
-      {% for membre in membres %}
+      {% for member in members %}
       <li>
-          <p>Nom : {{ membre.name }}</p>
-          <p>Prénom : {{ membre.first_name }}</p>
-          <p>Email : {{ membre.email }}</p>
-          <p>Téléphone : {{ membre.phone }}</p>
-          <p>Créé le : {{ membre.creation_date|date:"d F Y" }}</p>
+          <p>Nom : {{ member.name }}</p>
+          <p>Prénom : {{ member.first_name }}</p>
+          <p>Email : {{ member.email }}</p>
+          <p>Téléphone : {{ member.phone }}</p>
+          <p>Créé le : {{ member.creation_date|date:"d F Y" }}</p>
 
-          <button><a href="{% url 'app_bibliothecaire:updatemembre' id=membre.id %}"> Modifier</a></button>
-          <form action="{% url 'app_bibliothecaire:deletemembre' id=membre.id %}" method="POST" style="display:inline;">
+          <button><a href="{% url 'app_bibliothecaire:updatemembre' id=member.id %}"> Modifier</a></button>
+          <form action="{% url 'app_bibliothecaire:deletemembre' id=member.id %}" method="POST" style="display:inline;">
                 {% csrf_token %}
                 <button type="submit">Supprimer</button>
           </form>
 
           <p><strong>Emprunts en cours :</strong></p>
           <ul>
-            {% for emprunt in membre.emprunts_en_cours %}
+            {% for loan in member.current_loans %}
             <li>
-                <p>Média : {{ emprunt.media.name }}</p>
-                <p>Date d'emprunt : {{ emprunt.date_emprunt|date:"d F Y" }}</p>
-                <p>Date de retour prévue : {{ emprunt.date_retour_prevue|date:"d F Y" }}</p>
-                <p>Status : {% if emprunt.date_retour_effective %}
-                    Retour effectué le {{ emprunt.date_retour_effective|date:"d F Y" }}
+                <p>Média : {{ loan.media.name }}</p>
+                <p>Date d'emprunt : {{ loan.loan_date|date:"d F Y" }}</p>
+                <p>Date de retour prévue : {{ loan.expected_return_date|date:"d F Y" }}</p>
+                <p>Status : {% if loan.effective_return_date %}
+                    Retour effectué le {{ loan.date_effective_return_date|date:"d F Y" }}
                     {% else %} En cours {% endif %}</p>
             </li>
             {% empty %}

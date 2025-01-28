@@ -9,7 +9,7 @@
     <p>Modifier la fiche du membre !</p>
     <form method="post">
         {% csrf_token %}
-        {{ updatemembre.as_p }}
+        {{ memberupdate.as_p }}
         <button type="submit">Enregistrer</button>
     </form>
 </body>

@@ -51,3 +51,409 @@ INFO 2025-01-28 12:51:48,441 autoreload C:\Users\natha\python_venv\training_proj
 INFO 2025-01-28 12:51:48,880 autoreload Watching for file changes with StatReloader
 INFO 2025-01-28 12:58:02,761 autoreload C:\Users\natha\python_venv\training_project\my_mediatheque_project\app_bibliothecaire\forms.py changed, reloading.
 INFO 2025-01-28 12:58:03,171 autoreload Watching for file changes with StatReloader
+INFO 2025-01-28 15:50:13,493 autoreload Watching for file changes with StatReloader
+INFO 2025-01-28 15:50:15,625 basehttp "GET / HTTP/1.1" 200 352
+INFO 2025-01-28 15:50:19,622 basehttp "GET /membre/ HTTP/1.1" 200 354
+INFO 2025-01-28 15:50:21,016 basehttp "GET /membre/liste_medias_membre/ HTTP/1.1" 200 2696
+INFO 2025-01-28 15:50:26,073 basehttp "GET /membre/ HTTP/1.1" 200 354
+INFO 2025-01-28 15:50:28,386 basehttp "GET / HTTP/1.1" 200 352
+INFO 2025-01-28 15:50:29,711 views Accès à la page d'accueil du bibliothécaire.
+INFO 2025-01-28 15:50:29,713 basehttp "GET /bibliothecaire/ HTTP/1.1" 200 1131
+INFO 2025-01-28 15:50:31,995 views Accès à la liste des membres.
+INFO 2025-01-28 15:50:32,012 basehttp "GET /bibliothecaire/listmembres/ HTTP/1.1" 200 3882
+INFO 2025-01-28 15:50:37,103 basehttp "GET /bibliothecaire/updatemembre/1/ HTTP/1.1" 200 1108
+INFO 2025-01-28 15:50:38,922 basehttp "POST /bibliothecaire/updatemembre/1/ HTTP/1.1" 302 0
+INFO 2025-01-28 15:50:38,927 views Accès à la liste des membres.
+INFO 2025-01-28 15:50:38,942 basehttp "GET /bibliothecaire/listmembres/ HTTP/1.1" 200 4115
+INFO 2025-01-28 15:50:42,926 views Accès à la page d'accueil du bibliothécaire.
+INFO 2025-01-28 15:50:42,927 basehttp "GET /bibliothecaire/ HTTP/1.1" 200 1131
+INFO 2025-01-28 15:50:44,649 views Soumission du formulaire d'ajout de membre.
+INFO 2025-01-28 15:50:44,649 views Affichage de la page d'ajout de membre.
+INFO 2025-01-28 15:50:44,652 basehttp "GET /bibliothecaire/ajoutmembre/ HTTP/1.1" 200 1040
+INFO 2025-01-28 15:50:46,246 views Accès à la page d'accueil du bibliothécaire.
+INFO 2025-01-28 15:50:46,247 basehttp "GET /bibliothecaire/ HTTP/1.1" 200 1131
+INFO 2025-01-28 15:50:47,900 views Accès à la liste des médias.
+ERROR 2025-01-28 15:50:47,901 views Erreur lors de la récupération des médias : Cannot resolve keyword 'date_retour_effective' into field. Choices are: borrower, borrower_id, effective_return_date, expected_return_date, id, loan_date, media, media_id
+Traceback (most recent call last):
+  File "C:\Users\natha\python_venv\training_project\my_mediatheque_project\app_bibliothecaire\views.py", line 154, in listmedia
+    book.current_loans = book.loans.filter(date_retour_effective__isnull=True).first()
+                         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\natha\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\natha\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 1476, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\natha\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 1494, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\natha\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 1501, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\natha\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 1609, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+                ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\natha\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 1641, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ~~~~~~~~~~~~~~~~~^
+        child,
+        ^^^^^^
+    ...<7 lines>...
+        update_join_types=update_join_types,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\natha\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 1491, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg, summarize)
+                                        ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\natha\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 1303, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+                                ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\natha\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 1768, in names_to_path
+    raise FieldError(
+    ...<2 lines>...
+    )
+django.core.exceptions.FieldError: Cannot resolve keyword 'date_retour_effective' into field. Choices are: borrower, borrower_id, effective_return_date, expected_return_date, id, loan_date, media, media_id
+INFO 2025-01-28 15:50:47,955 basehttp "GET /bibliothecaire/listmedia/ HTTP/1.1" 302 0
+INFO 2025-01-28 15:50:47,963 views Accès à la page d'accueil du bibliothécaire.
+INFO 2025-01-28 15:50:47,964 basehttp "GET /bibliothecaire/ HTTP/1.1" 200 1131
+INFO 2025-01-28 15:50:49,616 views Accès à la liste des médias.
+ERROR 2025-01-28 15:50:49,618 views Erreur lors de la récupération des médias : Cannot resolve keyword 'date_retour_effective' into field. Choices are: borrower, borrower_id, effective_return_date, expected_return_date, id, loan_date, media, media_id
+Traceback (most recent call last):
+  File "C:\Users\natha\python_venv\training_project\my_mediatheque_project\app_bibliothecaire\views.py", line 154, in listmedia
+    book.current_loans = book.loans.filter(date_retour_effective__isnull=True).first()
+                         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\natha\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\natha\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 1476, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\natha\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 1494, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\natha\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 1501, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\natha\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 1609, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+                ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\natha\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 1641, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ~~~~~~~~~~~~~~~~~^
+        child,
+        ^^^^^^
+    ...<7 lines>...
+        update_join_types=update_join_types,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\natha\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 1491, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg, summarize)
+                                        ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\natha\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 1303, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+                                ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\natha\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 1768, in names_to_path
+    raise FieldError(
+    ...<2 lines>...
+    )
+django.core.exceptions.FieldError: Cannot resolve keyword 'date_retour_effective' into field. Choices are: borrower, borrower_id, effective_return_date, expected_return_date, id, loan_date, media, media_id
+INFO 2025-01-28 15:50:49,630 basehttp "GET /bibliothecaire/listmedia/ HTTP/1.1" 302 0
+INFO 2025-01-28 15:50:49,636 views Accès à la page d'accueil du bibliothécaire.
+INFO 2025-01-28 15:50:49,637 basehttp "GET /bibliothecaire/ HTTP/1.1" 200 1131
+INFO 2025-01-28 15:51:17,756 autoreload Watching for file changes with StatReloader
+INFO 2025-01-28 15:51:20,147 basehttp "GET / HTTP/1.1" 200 352
+INFO 2025-01-28 15:51:23,073 views Accès à la page d'accueil du bibliothécaire.
+INFO 2025-01-28 15:51:23,075 basehttp "GET /bibliothecaire/ HTTP/1.1" 200 1131
+INFO 2025-01-28 15:51:26,341 views Accès à la liste des médias.
+ERROR 2025-01-28 15:51:26,343 views Erreur lors de la récupération des médias : Cannot resolve keyword 'date_retour_effective' into field. Choices are: borrower, borrower_id, effective_return_date, expected_return_date, id, loan_date, media, media_id
+Traceback (most recent call last):
+  File "C:\Users\natha\python_venv\training_project\my_mediatheque_project\app_bibliothecaire\views.py", line 154, in listmedia
+    book.current_loans = book.loans.filter(date_retour_effective__isnull=True).first()
+                         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\natha\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\natha\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 1476, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\natha\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 1494, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\natha\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 1501, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\natha\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 1609, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+                ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\natha\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 1641, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ~~~~~~~~~~~~~~~~~^
+        child,
+        ^^^^^^
+    ...<7 lines>...
+        update_join_types=update_join_types,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\natha\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 1491, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg, summarize)
+                                        ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\natha\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 1303, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+                                ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\natha\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 1768, in names_to_path
+    raise FieldError(
+    ...<2 lines>...
+    )
+django.core.exceptions.FieldError: Cannot resolve keyword 'date_retour_effective' into field. Choices are: borrower, borrower_id, effective_return_date, expected_return_date, id, loan_date, media, media_id
+INFO 2025-01-28 15:51:26,356 basehttp "GET /bibliothecaire/listmedia/ HTTP/1.1" 302 0
+INFO 2025-01-28 15:51:26,364 views Accès à la page d'accueil du bibliothécaire.
+INFO 2025-01-28 15:51:26,365 basehttp "GET /bibliothecaire/ HTTP/1.1" 200 1131
+INFO 2025-01-28 15:57:17,261 autoreload C:\Users\natha\python_venv\training_project\my_mediatheque_project\app_bibliothecaire\views.py changed, reloading.
+INFO 2025-01-28 15:57:17,699 autoreload Watching for file changes with StatReloader
+INFO 2025-01-28 15:57:20,300 basehttp "GET / HTTP/1.1" 200 352
+INFO 2025-01-28 15:57:23,302 views Accès à la page d'accueil du bibliothécaire.
+INFO 2025-01-28 15:57:23,304 basehttp "GET /bibliothecaire/ HTTP/1.1" 200 1131
+INFO 2025-01-28 15:57:24,809 views Accès à la liste des médias.
+INFO 2025-01-28 15:57:24,820 basehttp "GET /bibliothecaire/listmedia/ HTTP/1.1" 200 5440
+INFO 2025-01-28 15:57:30,157 views Accès à la page d'accueil du bibliothécaire.
+INFO 2025-01-28 15:57:30,158 basehttp "GET /bibliothecaire/ HTTP/1.1" 200 1131
+INFO 2025-01-28 15:57:32,608 basehttp "GET /bibliothecaire/ajoutmedia/ HTTP/1.1" 200 1422
+INFO 2025-01-28 15:57:36,753 basehttp "GET /bibliothecaire/ajout_livre/ HTTP/1.1" 200 1347
+INFO 2025-01-28 15:57:39,067 basehttp "GET /bibliothecaire/ajoutmedia/ HTTP/1.1" 200 1134
+INFO 2025-01-28 15:57:40,634 basehttp "GET /bibliothecaire/ajout_dvd/ HTTP/1.1" 200 1336
+INFO 2025-01-28 15:57:42,432 basehttp "GET /bibliothecaire/ajoutmedia/ HTTP/1.1" 200 1134
+INFO 2025-01-28 15:57:44,029 basehttp "GET /bibliothecaire/ajout_cd/ HTTP/1.1" 200 1348
+INFO 2025-01-28 15:57:45,187 basehttp "GET /bibliothecaire/ajoutmedia/ HTTP/1.1" 200 1134
+INFO 2025-01-28 15:57:46,489 basehttp "GET /bibliothecaire/ajout_plateau/ HTTP/1.1" 200 1610
+INFO 2025-01-28 15:59:19,917 basehttp "GET /bibliothecaire/ajout_plateau/ HTTP/1.1" 200 1610
+INFO 2025-01-28 15:59:20,521 autoreload C:\Users\natha\python_venv\training_project\my_mediatheque_project\app_bibliothecaire\forms.py changed, reloading.
+INFO 2025-01-28 15:59:20,945 autoreload Watching for file changes with StatReloader
+INFO 2025-01-28 15:59:21,245 basehttp "GET /bibliothecaire/ajout_plateau/ HTTP/1.1" 200 1610
+INFO 2025-01-28 15:59:22,634 basehttp "GET /bibliothecaire/ajout_plateau/ HTTP/1.1" 200 1610
+INFO 2025-01-28 15:59:27,159 basehttp "GET /bibliothecaire/ajoutmedia/ HTTP/1.1" 200 1134
+INFO 2025-01-28 15:59:29,231 basehttp "GET /bibliothecaire/ajout_plateau/ HTTP/1.1" 200 1610
+INFO 2025-01-28 15:59:45,384 basehttp "GET /bibliothecaire/ajoutmedia/ HTTP/1.1" 200 1134
+INFO 2025-01-28 15:59:45,401 autoreload C:\Users\natha\python_venv\training_project\my_mediatheque_project\app_bibliothecaire\forms.py changed, reloading.
+INFO 2025-01-28 15:59:45,898 autoreload Watching for file changes with StatReloader
+INFO 2025-01-28 15:59:48,933 views Accès à la page d'accueil du bibliothécaire.
+INFO 2025-01-28 15:59:48,942 basehttp "GET /bibliothecaire/ HTTP/1.1" 200 1131
+ERROR 2025-01-28 15:59:50,741 log Internal Server Error: /bibliothecaire/creer_emprunt/
+Traceback (most recent call last):
+  File "C:\Users\natha\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\natha\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\natha\python_venv\training_project\my_mediatheque_project\app_bibliothecaire\views.py", line 261, in create_loan
+    form = LoanForm(request.GET or None, categorie=categorie)
+  File "C:\Users\natha\python_venv\training_project\my_mediatheque_project\app_bibliothecaire\forms.py", line 229, in __init__
+    self.fields['media_id'].queryset = Media.objects.filter(disponibility=True)
+                                       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\natha\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\natha\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 1476, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\natha\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 1494, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\natha\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 1501, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\natha\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 1609, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+                ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\natha\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 1641, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ~~~~~~~~~~~~~~~~~^
+        child,
+        ^^^^^^
+    ...<7 lines>...
+        update_join_types=update_join_types,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\natha\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 1491, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg, summarize)
+                                        ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\natha\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 1303, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+                                ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\natha\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 1768, in names_to_path
+    raise FieldError(
+    ...<2 lines>...
+    )
+django.core.exceptions.FieldError: Cannot resolve keyword 'disponibility' into field. Choices are: author, availability, board, book, borrower, borrower_id, category, cd, dvd, id, loan_date, loans, name
+ERROR 2025-01-28 15:59:50,745 basehttp "GET /bibliothecaire/creer_emprunt/ HTTP/1.1" 500 116928
+INFO 2025-01-28 16:03:31,727 autoreload C:\Users\natha\python_venv\training_project\my_mediatheque_project\app_bibliothecaire\forms.py changed, reloading.
+INFO 2025-01-28 16:03:32,213 autoreload Watching for file changes with StatReloader
+INFO 2025-01-28 16:03:45,847 basehttp "GET /bibliothecaire/creer_emprunt/ HTTP/1.1" 200 1812
+INFO 2025-01-28 16:03:49,476 views Accès à la page d'accueil du bibliothécaire.
+INFO 2025-01-28 16:03:49,478 basehttp "GET /bibliothecaire/ HTTP/1.1" 200 1131
+INFO 2025-01-28 16:03:51,334 basehttp "GET /bibliothecaire/retour_emprunt/ HTTP/1.1" 200 786
+INFO 2025-01-28 16:03:58,252 basehttp "GET /bibliothecaire/creer_emprunt/ HTTP/1.1" 200 1812
+INFO 2025-01-28 16:04:02,417 basehttp "GET /bibliothecaire/creer_emprunt/?categorie=book HTTP/1.1" 200 1676
+INFO 2025-01-28 16:04:14,654 basehttp "GET /bibliothecaire/creer_emprunt/?categorie=dvd HTTP/1.1" 200 1720
+INFO 2025-01-28 16:04:21,961 basehttp "GET /bibliothecaire/creer_emprunt/?categorie=board HTTP/1.1" 200 1676
+INFO 2025-01-28 16:05:05,638 autoreload C:\Users\natha\python_venv\training_project\my_mediatheque_project\app_bibliothecaire\forms.py changed, reloading.
+INFO 2025-01-28 16:05:06,156 autoreload Watching for file changes with StatReloader
+INFO 2025-01-28 16:05:06,244 views Accès à la page d'accueil du bibliothécaire.
+INFO 2025-01-28 16:05:06,251 basehttp "GET /bibliothecaire/ HTTP/1.1" 200 1131
+INFO 2025-01-28 16:05:08,028 basehttp "GET /bibliothecaire/creer_emprunt/ HTTP/1.1" 200 1812
+INFO 2025-01-28 16:35:25,812 views Accès à la page d'accueil du bibliothécaire.
+INFO 2025-01-28 16:35:25,813 basehttp "GET /bibliothecaire/ HTTP/1.1" 200 1131
+INFO 2025-01-28 16:35:27,489 views Accès à la liste des médias.
+INFO 2025-01-28 16:35:27,499 basehttp "GET /bibliothecaire/listmedia/ HTTP/1.1" 200 5440
+INFO 2025-01-28 16:35:42,638 views Accès à la page d'accueil du bibliothécaire.
+INFO 2025-01-28 16:35:42,640 basehttp "GET /bibliothecaire/ HTTP/1.1" 200 1131
+INFO 2025-01-28 16:35:45,384 basehttp "GET /bibliothecaire/creer_emprunt/ HTTP/1.1" 200 1812
+INFO 2025-01-28 16:35:59,531 views Accès à la page d'accueil du bibliothécaire.
+INFO 2025-01-28 16:35:59,533 basehttp "GET /bibliothecaire/ HTTP/1.1" 200 1131
+INFO 2025-01-28 16:36:01,335 views Accès à la liste des médias.
+INFO 2025-01-28 16:36:01,346 basehttp "GET /bibliothecaire/listmedia/ HTTP/1.1" 200 5440
+INFO 2025-01-28 16:36:23,897 basehttp "POST /bibliothecaire/deletemedia/19/ HTTP/1.1" 302 0
+INFO 2025-01-28 16:36:23,900 views Accès à la liste des médias.
+INFO 2025-01-28 16:36:23,910 basehttp "GET /bibliothecaire/listmedia/ HTTP/1.1" 200 4921
+INFO 2025-01-28 16:36:26,015 views Accès à la page d'accueil du bibliothécaire.
+INFO 2025-01-28 16:36:26,016 basehttp "GET /bibliothecaire/ HTTP/1.1" 200 1131
+INFO 2025-01-28 16:36:27,870 basehttp "GET /bibliothecaire/ajoutmedia/ HTTP/1.1" 200 1275
+INFO 2025-01-28 16:36:29,252 basehttp "GET /bibliothecaire/ajout_livre/ HTTP/1.1" 200 1347
+INFO 2025-01-28 16:36:54,926 basehttp "POST /bibliothecaire/ajout_livre/ HTTP/1.1" 302 0
+INFO 2025-01-28 16:36:54,939 basehttp "GET /bibliothecaire/ajoutmedia/ HTTP/1.1" 200 1297
+INFO 2025-01-28 16:36:58,342 views Accès à la liste des médias.
+INFO 2025-01-28 16:36:58,351 basehttp "GET /bibliothecaire/listmedia/ HTTP/1.1" 200 5440
+INFO 2025-01-28 16:37:02,929 views Accès à la page d'accueil du bibliothécaire.
+INFO 2025-01-28 16:37:02,931 basehttp "GET /bibliothecaire/ HTTP/1.1" 200 1131
+INFO 2025-01-28 16:37:06,418 basehttp "GET /bibliothecaire/creer_emprunt/ HTTP/1.1" 200 1849
+INFO 2025-01-28 16:37:10,455 basehttp "GET /bibliothecaire/creer_emprunt/?categorie=book HTTP/1.1" 200 1713
+INFO 2025-01-28 16:37:17,982 views Accès à la page d'accueil du bibliothécaire.
+INFO 2025-01-28 16:37:17,983 basehttp "GET /bibliothecaire/ HTTP/1.1" 200 1131
+INFO 2025-01-28 16:37:20,559 views Accès à la liste des médias.
+INFO 2025-01-28 16:37:20,566 basehttp "GET /bibliothecaire/listmedia/ HTTP/1.1" 200 5440
+INFO 2025-01-28 16:37:51,621 basehttp "POST /bibliothecaire/deletemedia/28/ HTTP/1.1" 302 0
+INFO 2025-01-28 16:37:51,624 views Accès à la liste des médias.
+INFO 2025-01-28 16:37:51,634 basehttp "GET /bibliothecaire/listmedia/ HTTP/1.1" 200 4916
+INFO 2025-01-28 16:37:53,609 views Accès à la page d'accueil du bibliothécaire.
+INFO 2025-01-28 16:37:53,611 basehttp "GET /bibliothecaire/ HTTP/1.1" 200 1131
+INFO 2025-01-28 16:37:55,418 basehttp "GET /bibliothecaire/ajoutmedia/ HTTP/1.1" 200 1275
+INFO 2025-01-28 16:37:56,764 basehttp "GET /bibliothecaire/ajout_livre/ HTTP/1.1" 200 1347
+INFO 2025-01-28 16:38:15,494 basehttp "POST /bibliothecaire/ajout_livre/ HTTP/1.1" 302 0
+INFO 2025-01-28 16:38:15,507 basehttp "GET /bibliothecaire/ajoutmedia/ HTTP/1.1" 200 1297
+INFO 2025-01-28 16:38:23,391 views Accès à la page d'accueil du bibliothécaire.
+INFO 2025-01-28 16:38:23,392 basehttp "GET /bibliothecaire/ HTTP/1.1" 200 1131
+INFO 2025-01-28 16:38:25,111 basehttp "GET /bibliothecaire/creer_emprunt/ HTTP/1.1" 200 1849
+INFO 2025-01-28 16:38:28,198 basehttp "GET /bibliothecaire/creer_emprunt/?categorie=book HTTP/1.1" 200 1757
+INFO 2025-01-28 16:38:35,846 views Accès à la page d'accueil du bibliothécaire.
+INFO 2025-01-28 16:38:35,847 basehttp "GET /bibliothecaire/ HTTP/1.1" 200 1131
+INFO 2025-01-28 16:38:39,497 views Accès à la liste des membres.
+INFO 2025-01-28 16:38:39,514 basehttp "GET /bibliothecaire/listmembres/ HTTP/1.1" 200 3882
+INFO 2025-01-28 16:38:43,132 basehttp "GET /bibliothecaire/updatemembre/1/ HTTP/1.1" 200 1108
+INFO 2025-01-28 16:38:48,404 basehttp "POST /bibliothecaire/updatemembre/1/ HTTP/1.1" 302 0
+INFO 2025-01-28 16:38:48,407 views Accès à la liste des membres.
+INFO 2025-01-28 16:38:48,419 basehttp "GET /bibliothecaire/listmembres/ HTTP/1.1" 200 4115
+INFO 2025-01-28 16:39:02,598 views Tentative de suppression du membre avec ID : 1
+INFO 2025-01-28 16:39:02,606 views Membre supprimé avec succès : MARTIN Pierre
+INFO 2025-01-28 16:39:02,613 basehttp "POST /bibliothecaire/deletemembre/1/ HTTP/1.1" 302 0
+INFO 2025-01-28 16:39:02,616 views Accès à la liste des membres.
+INFO 2025-01-28 16:39:02,629 basehttp "GET /bibliothecaire/listmembres/ HTTP/1.1" 200 3327
+INFO 2025-01-28 16:39:07,708 views Accès à la page d'accueil du bibliothécaire.
+INFO 2025-01-28 16:39:07,709 basehttp "GET /bibliothecaire/ HTTP/1.1" 200 1131
+INFO 2025-01-28 16:39:09,339 views Soumission du formulaire d'ajout de membre.
+INFO 2025-01-28 16:39:09,339 views Affichage de la page d'ajout de membre.
+INFO 2025-01-28 16:39:09,343 basehttp "GET /bibliothecaire/ajoutmembre/ HTTP/1.1" 200 1040
+INFO 2025-01-28 16:39:41,281 views Soumission du formulaire d'ajout de membre.
+INFO 2025-01-28 16:39:41,289 views Membre ajouté avec succès : MARTIN Pierre
+INFO 2025-01-28 16:39:41,297 basehttp "POST /bibliothecaire/ajoutmembre/ HTTP/1.1" 302 0
+INFO 2025-01-28 16:39:41,300 views Accès à la liste des membres.
+INFO 2025-01-28 16:39:41,313 basehttp "GET /bibliothecaire/listmembres/ HTTP/1.1" 200 4117
+INFO 2025-01-28 16:39:47,920 views Accès à la page d'accueil du bibliothécaire.
+INFO 2025-01-28 16:39:47,921 basehttp "GET /bibliothecaire/ HTTP/1.1" 200 1131
+INFO 2025-01-28 16:39:53,161 views Accès à la liste des médias.
+INFO 2025-01-28 16:39:53,170 basehttp "GET /bibliothecaire/listmedia/ HTTP/1.1" 200 5440
+INFO 2025-01-28 16:40:05,249 views Accès à la page d'accueil du bibliothécaire.
+INFO 2025-01-28 16:40:05,250 basehttp "GET /bibliothecaire/ HTTP/1.1" 200 1131
+INFO 2025-01-28 16:40:09,249 basehttp "GET /bibliothecaire/creer_emprunt/ HTTP/1.1" 200 1850
+INFO 2025-01-28 16:40:13,401 basehttp "GET /bibliothecaire/creer_emprunt/?categorie=book HTTP/1.1" 200 1758
+INFO 2025-01-28 16:40:25,938 basehttp "POST /bibliothecaire/creer_emprunt/?categorie=book HTTP/1.1" 302 0
+INFO 2025-01-28 16:40:25,954 basehttp "GET /bibliothecaire/creer_emprunt/ HTTP/1.1" 200 1942
+INFO 2025-01-28 16:40:28,263 views Accès à la page d'accueil du bibliothécaire.
+INFO 2025-01-28 16:40:28,264 basehttp "GET /bibliothecaire/ HTTP/1.1" 200 1131
+INFO 2025-01-28 16:40:30,109 views Accès à la liste des médias.
+INFO 2025-01-28 16:40:30,120 basehttp "GET /bibliothecaire/listmedia/ HTTP/1.1" 200 5550
+INFO 2025-01-28 16:40:36,568 views Accès à la page d'accueil du bibliothécaire.
+INFO 2025-01-28 16:40:36,570 basehttp "GET /bibliothecaire/ HTTP/1.1" 200 1131
+INFO 2025-01-28 16:40:38,223 views Accès à la liste des membres.
+INFO 2025-01-28 16:40:38,229 basehttp "GET /bibliothecaire/listmembres/ HTTP/1.1" 200 4078
+INFO 2025-01-28 16:40:43,687 views Accès à la page d'accueil du bibliothécaire.
+INFO 2025-01-28 16:40:43,689 basehttp "GET /bibliothecaire/ HTTP/1.1" 200 1131
+INFO 2025-01-28 16:40:45,846 basehttp "GET /bibliothecaire/retour_emprunt/ HTTP/1.1" 200 787
+INFO 2025-01-28 16:40:49,494 basehttp "POST /bibliothecaire/retour_emprunt/ HTTP/1.1" 302 0
+WARNING 2025-01-28 16:40:49,502 log Not Found: /bibliothecaire/retour_emprunt/
+WARNING 2025-01-28 16:40:49,503 basehttp "GET /bibliothecaire/retour_emprunt/?borrower_id=2 HTTP/1.1" 404 6303
+INFO 2025-01-28 16:41:17,667 basehttp "POST /bibliothecaire/retour_emprunt/ HTTP/1.1" 302 0
+WARNING 2025-01-28 16:41:17,674 log Not Found: /bibliothecaire/retour_emprunt/
+WARNING 2025-01-28 16:41:17,674 basehttp "GET /bibliothecaire/retour_emprunt/?borrower_id=2 HTTP/1.1" 404 6303
+INFO 2025-01-28 16:44:15,829 autoreload Watching for file changes with StatReloader
+INFO 2025-01-28 16:44:19,029 basehttp "GET / HTTP/1.1" 200 352
+INFO 2025-01-28 16:44:22,199 basehttp "GET /membre/ HTTP/1.1" 200 354
+INFO 2025-01-28 16:44:23,734 basehttp "GET /membre/liste_medias_membre/ HTTP/1.1" 200 2724
+INFO 2025-01-28 16:44:33,392 basehttp "GET /membre/ HTTP/1.1" 200 354
+INFO 2025-01-28 16:44:36,634 basehttp "GET / HTTP/1.1" 200 352
+INFO 2025-01-28 16:44:37,687 views Accès à la page d'accueil du bibliothécaire.
+INFO 2025-01-28 16:44:37,689 basehttp "GET /bibliothecaire/ HTTP/1.1" 200 1131
+INFO 2025-01-28 16:44:42,608 basehttp "GET /bibliothecaire/retour_emprunt/ HTTP/1.1" 200 787
+INFO 2025-01-28 16:44:47,888 basehttp "POST /bibliothecaire/retour_emprunt/ HTTP/1.1" 302 0
+WARNING 2025-01-28 16:44:47,897 log Not Found: /bibliothecaire/retour_emprunt/
+WARNING 2025-01-28 16:44:47,897 basehttp "GET /bibliothecaire/retour_emprunt/?borrower_id=2 HTTP/1.1" 404 6303
+INFO 2025-01-28 16:49:09,881 autoreload C:\Users\natha\python_venv\training_project\my_mediatheque_project\app_bibliothecaire\views.py changed, reloading.
+INFO 2025-01-28 16:49:10,324 autoreload Watching for file changes with StatReloader
+INFO 2025-01-28 16:49:12,159 basehttp "GET /bibliothecaire/retour_emprunt/ HTTP/1.1" 200 787
+INFO 2025-01-28 16:49:14,116 basehttp "POST /bibliothecaire/retour_emprunt/ HTTP/1.1" 302 0
+INFO 2025-01-28 16:49:14,136 basehttp "GET /bibliothecaire/retour_emprunt/?borrower_id=2 HTTP/1.1" 200 898
+INFO 2025-01-28 16:49:20,859 views Accès à la page d'accueil du bibliothécaire.
+INFO 2025-01-28 16:49:20,862 basehttp "GET /bibliothecaire/ HTTP/1.1" 200 1131
+INFO 2025-01-28 17:11:56,348 autoreload Watching for file changes with StatReloader
+INFO 2025-01-28 17:11:59,052 basehttp "GET / HTTP/1.1" 200 352
+INFO 2025-01-28 18:00:57,184 views Soumission du formulaire d'ajout de membre.
+INFO 2025-01-28 18:00:57,186 views Membre ajouté avec succès : Bic Bleu
+INFO 2025-01-28 18:01:14,484 views Soumission du formulaire d'ajout de membre.
+INFO 2025-01-28 18:01:14,486 views Membre ajouté avec succès : Bic Bleu
+INFO 2025-01-28 18:01:33,663 views Soumission du formulaire d'ajout de membre.
+INFO 2025-01-28 18:01:33,665 views Membre ajouté avec succès : Bic Bleu
+INFO 2025-01-28 18:01:33,673 views Tentative de suppression du membre avec ID : 1
+INFO 2025-01-28 18:01:33,674 views Membre supprimé avec succès : Smith Anna
+INFO 2025-01-28 18:01:49,166 views Soumission du formulaire d'ajout de membre.
+INFO 2025-01-28 18:01:49,168 views Membre ajouté avec succès : Bic Bleu
+INFO 2025-01-28 18:01:49,176 views Tentative de suppression du membre avec ID : 1
+INFO 2025-01-28 18:01:49,178 views Membre supprimé avec succès : Smith Anna
+INFO 2025-01-28 18:02:02,292 views Soumission du formulaire d'ajout de membre.
+INFO 2025-01-28 18:02:02,294 views Membre ajouté avec succès : Bic Bleu
+INFO 2025-01-28 18:02:02,302 views Tentative de suppression du membre avec ID : 1
+INFO 2025-01-28 18:02:02,303 views Membre supprimé avec succès : Smith Anna
+INFO 2025-01-28 18:02:17,427 views Soumission du formulaire d'ajout de membre.
+INFO 2025-01-28 18:02:17,429 views Membre ajouté avec succès : Bic Bleu
+INFO 2025-01-28 18:02:17,437 views Tentative de suppression du membre avec ID : 1
+INFO 2025-01-28 18:02:17,439 views Membre supprimé avec succès : Smith Anna
+INFO 2025-01-28 18:02:35,210 views Soumission du formulaire d'ajout de membre.
+INFO 2025-01-28 18:02:35,213 views Membre ajouté avec succès : Bic Bleu
+INFO 2025-01-28 18:02:35,221 views Tentative de suppression du membre avec ID : 1
+INFO 2025-01-28 18:02:35,222 views Membre supprimé avec succès : Smith Anna
+INFO 2025-01-28 18:04:22,538 views Soumission du formulaire d'ajout de membre.
+INFO 2025-01-28 18:04:22,540 views Membre ajouté avec succès : Bic Bleu
+INFO 2025-01-28 18:04:22,549 views Tentative de suppression du membre avec ID : 1
+INFO 2025-01-28 18:04:22,550 views Membre supprimé avec succès : Smith Anna
+INFO 2025-01-28 18:04:36,527 views Soumission du formulaire d'ajout de membre.
+INFO 2025-01-28 18:04:36,530 views Membre ajouté avec succès : Bic Bleu
+INFO 2025-01-28 18:04:36,537 views Tentative de suppression du membre avec ID : 1
+INFO 2025-01-28 18:04:36,538 views Membre supprimé avec succès : Smith Anna
+INFO 2025-01-28 18:07:18,458 views Soumission du formulaire d'ajout de membre.
+INFO 2025-01-28 18:07:18,460 views Membre ajouté avec succès : Bic Bleu
+INFO 2025-01-28 18:07:18,468 views Tentative de suppression du membre avec ID : 1
+INFO 2025-01-28 18:07:18,469 views Membre supprimé avec succès : Smith Anna
+INFO 2025-01-28 18:08:04,616 views Soumission du formulaire d'ajout de membre.
+INFO 2025-01-28 18:08:04,618 views Membre ajouté avec succès : Bic Bleu
+INFO 2025-01-28 18:08:04,626 views Tentative de suppression du membre avec ID : 1
+INFO 2025-01-28 18:08:04,627 views Membre supprimé avec succès : Smith Anna
