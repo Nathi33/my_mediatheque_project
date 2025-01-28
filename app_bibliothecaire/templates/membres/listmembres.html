@@ -22,7 +22,6 @@
     <h1>Liste des membres</h1>
 
     <!-- Vérifie s'il y a des messages dans la file d'attente qui sont ajoutés via messages.success de Django -->
-    <!-- Si des messages sont présents, le bloc <div class="message" est exécuté -->
     {% if messages %}
         <div class="message">
             <!-- Boucle parcourant tous les messages stockés dans la file d'attente -->
@@ -30,7 +29,6 @@
                 <p>{{ message }}</p>
             {% endfor %}
         </div>
-    <!-- Fin de la condition, si plus de message présent dans la file d'attente, rien ne s'affiche -->
     {% endif %}
 
     <ul>

@@ -77,7 +77,7 @@ class LivreForm(forms.Form):
     categorie = forms.ChoiceField(
         choices=CATEGORIES_CHOICES,
         label="Catégorie",
-        required=False,  # Permet de ne pas forcer la sélection
+        required=False,
         initial='livre',
     )
 
@@ -111,7 +111,7 @@ class DvdForm(forms.Form):
     categorie = forms.ChoiceField(
         choices=CATEGORIES_CHOICES,
         label="Catégorie",
-        required=False,  # Permet de ne pas forcer la sélection
+        required=False,
         initial='dvd',
     )
 
@@ -145,7 +145,7 @@ class CdForm(forms.Form):
     categorie = forms.ChoiceField(
         choices=CATEGORIES_CHOICES,
         label="Catégorie",
-        required=False,  # Permet de ne pas forcer la sélection
+        required=False,
         initial='cd',
     )
 
@@ -184,7 +184,7 @@ class PlateauForm(forms.Form):
     categorie = forms.ChoiceField(
         choices=CATEGORIES_CHOICES,
         label="Catégorie",
-        required=False,  # Permet de ne pas forcer la sélection
+        required=False,
         initial='plateau',
     )
 
@@ -200,7 +200,7 @@ class EmpruntForm(forms.Form):
     categorie = forms.ChoiceField(
         choices=CATEGORIES_CHOICES,
         label="Sélectionner une catégorie",
-        required=False  # Permet de ne pas forcer la sélection
+        required=False
     )
     membre_id = forms.ModelChoiceField(
         queryset=Membre.objects.all(),

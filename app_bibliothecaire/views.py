@@ -22,16 +22,23 @@ def home_bibliothecaire(request):
 
 # Fonctionnalités : Membre
 def listemembres(request):
+    """ Affiche la liste des membres.
+        Pour chaque membre, récupère les emprunts en cours et les inclut dans l'objet membre.
+        En cas d'erreur, une redirection vers la page d'accueil est effectuée avec un message.
+
+        Paramètres :
+            - request (HttpRequest) : L'objet requête HTTP.
+
+        Retour :
+            - HttpResponse : Rendu de la page 'membres/listmembres.html' avec le contexte :
+                - membres (QuerySet) : Liste des membres et leurs emprunts.
+            - HttpResponseRedirect : Redirection vers la page d'accueil en cas d'erreur.
+        """
     logger.info("Accès à la liste des membres.")
-    # La variable membre récupère tous les objets de la table Membre dans la BDD
     try:
         membres = Membre.objects.all()
         for membre in membres:
-            # Filtre les emprunts en cours pour chaque membre
             membre.emprunts_en_cours = Emprunt.objects.filter(emprunteur=membre, date_retour_effective__isnull=True)
-            # La fonction render() est utilisée pr renvoyer une réponse HTTP ac un template HTML ici : 'membres/listmembres.html'
-            # La clé 'membres' devient une variable accessible dans le template
-            # membres est une valeur associée à cette clé, c'est la liste des objets Membre récupéré
             logger.debug(f"{len(membres)} membres récupérés.")
             return render(request, 'membres/listmembres.html', {'membres': membres})
     except Exception as e:
@@ -41,38 +48,40 @@ def listemembres(request):
 
 
 def ajoutmembre(request):
+    """ Gère l'ajout d'un nouveau membre.
+
+        Affiche un formulaire d'ajout de membre. Si la requête est une soumission de formulaire (POST),
+        elle valide les données et enregistre un nouveau membre dans la base de données. En cas d'erreur, un message
+        d'erreur est affiché. Si la méthode est GET, un formulaire vide est affiché pour que l'utilisateur puisse saisir
+        les informations du membre.
+
+        Args:
+            request (HttpRequest): L'objet requête HTTP.
+
+        Returns:
+            HttpResponse: La réponse contenant le rendu du formulaire d'ajout de membre ou une redirection vers la liste des membres
+                          en cas de succès ou d'erreur.
+        """
     logger.info("Soumission du formulaire d'ajout de membre.")
-    # Vérification de la méthode HTTP : si POST le formulaire a été soumis sinon l'afficher pour le remplir
     if request.method == 'POST':
-        # Création d'une instance du formulaire avec les données envoyées par l'utilisateur via le formulaire
         creationmembre = Creationmembre(request.POST)
-        # Vérifie que toutes les contraintes du formulaire sont respectées
         if creationmembre.is_valid():
             try:
-                # Si le formulaire est valide, une instance vide du modèle Membre est créée
                 membre = Membre()
-                # Les données du formulaire sont récupérées à l'aide de creationmembre.cleaned_data qui contiennet les
-                # données valides
                 membre.name = creationmembre.cleaned_data['name']
                 membre.first_name = creationmembre.cleaned_data['first_name']
                 membre.email = creationmembre.cleaned_data['email']
                 membre.phone = creationmembre.cleaned_data['phone']
-                # Enregistre le nouvel objet Membre dans la base de données
                 membre.save()
                 logger.info(f"Membre ajouté avec succès : {membre.name} {membre.first_name}")
-                # Notification de confirmation de création
                 messages.success(request, "Le membre a été mis ajouté avec succès !")
                 return redirect('app_bibliothecaire:listmembres')
             except Exception as e:
                 logger.error(f"Erreur lors de l'ajout du membre : {e}", exc_info=True)
                 messages.error(request, "Erreur lors de l'ajout du membre.")
-        # Si le formulaire n'est pas valide, la page ajoutmembre est réaffichée avec le formulaire rempli 'creationMembre
-        # indiquant les erreurs ou champs manquants.
         else:
             logger.warning("Formulaire d'ajout de membre invalide.")
             return render(request, 'membres/ajoutmembre.html', {'creationMembre': creationmembre})
-    # Si la méthode HTTP est GET, une instance vide du formulaire est créée et
-    # la page ajoutmembre.html est affichée avec le formulaire vide.
     else:
         logger.info("Affichage de la page d'ajout de membre.")
         creationmembre = Creationmembre()
@@ -80,8 +89,15 @@ def ajoutmembre(request):
 
 
 def updatemembre(request, id):
-    # Récupère l'objet Membre correspondant à l'ID fourni
-    # Si aucun membre avec l'ID n'existe alors une page 404 est envoyée
+    """ Permet de mettre à jour les informations d'un membre.
+
+    Paramètres :
+        - request (HttpRequest) : La requête HTTP.
+        - id (int) : L'ID du membre à mettre à jour.
+
+    Retour :
+        - HttpResponse : La page du formulaire de mise à jour ou une redirection après mise à jour réussie.
+    """
     membre = get_object_or_404(Membre, pk=id)
     if request.method == 'POST':
         update_membre = Updatemembre(request.POST)
@@ -93,8 +109,6 @@ def updatemembre(request, id):
             membre.save()
             messages.success(request, "Le membre a été mis à jour avec succès !")
         return redirect('app_bibliothecaire:listmembres')
-    # Si la méthode est GET, une instance du formulaire Updatemembre est créée,
-    # les champs du formulaire sont pré-remplis avec les données existantes du membre (initial={...})
     else:
         update_membre = Updatemembre(initial={
             'name': membre.name,
@@ -106,6 +120,15 @@ def updatemembre(request, id):
 
 
 def deletemembre(request, id):
+    """ Permet de supprimer un membre de la bibliothèque.
+
+    Paramètres :
+        - request (HttpRequest) : La requête HTTP.
+        - id (int) : L'ID du membre à supprimer.
+
+    Retour :
+        - HttpResponseRedirect : Redirection vers la liste des membres après suppression.
+    """
     logger.info(f"Tentative de suppression du membre avec ID : {id}")
     try:
         membre = get_object_or_404(Membre, pk=id)
@@ -141,7 +164,6 @@ def listemedia(request):
             'plateaux': plateaux,
         }
         logger.debug(f"Médias récupérés : {len(livres)} livres, {len(dvds)} DVD, {len(cds)} CD, {len(plateaux)} plateaux.")
-        # Ici la variable 'context' permet de regrouper les données tq {'livres': livres, 'dvds': dvds, ...)
         return render(request, 'media/listmedia.html', context)
     except Exception as e:
         logger.error(f"Erreur lors de la récupération des médias : {e}", exc_info=True)
