@@ -2,9 +2,6 @@ import pytest
 from django.urls import reverse
 from app_bibliothecaire.models import Member, Book, Media, Loan
 from django.utils.timezone import now
-from django.contrib.messages import get_messages
-from django.test import Client
-from app_bibliothecaire.forms import ReturnLoanForm
 
 # Vérifie la création d'un membre après un POST valide
 @pytest.mark.django_db
@@ -135,7 +132,7 @@ def test_return_loan(client):
 
 # Vérifie l'authentification
 @pytest.mark.django_db
-def test_access_home_bibliothecaire_unauthenticated(client):
+def test_access_home_librarian_unauthenticated(client):
     response = client.get(reverse('app_bibliothecaire:home_bibliothecaire'))
     assert response.status_code == 302  # Redirection vers la page de login
     assert '/login/' in response.url
