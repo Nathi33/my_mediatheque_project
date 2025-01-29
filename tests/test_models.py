@@ -33,7 +33,7 @@ def test_media_creation():
     assert media.availability is True
 
 
-# Vérifie la création d'un emprunt et l'indisponibilité de celui-ci
+# Vérifie la création d'un emprunt et l'indisponibilité du média
 @pytest.mark.django_db
 def test_loan_creation():
     member = Member.objects.create(

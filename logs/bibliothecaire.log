@@ -457,3 +457,16 @@ INFO 2025-01-28 18:08:04,616 views Soumission du formulaire d'ajout de membre.
 INFO 2025-01-28 18:08:04,618 views Membre ajouté avec succès : Bic Bleu
 INFO 2025-01-28 18:08:04,626 views Tentative de suppression du membre avec ID : 1
 INFO 2025-01-28 18:08:04,627 views Membre supprimé avec succès : Smith Anna
+INFO 2025-01-29 10:05:23,988 autoreload Watching for file changes with StatReloader
+INFO 2025-01-29 10:05:28,620 basehttp "GET / HTTP/1.1" 200 352
+WARNING 2025-01-29 10:05:28,808 log Not Found: /favicon.ico
+WARNING 2025-01-29 10:05:28,808 basehttp "GET /favicon.ico HTTP/1.1" 404 3016
+INFO 2025-01-29 10:05:30,623 views Accès à la page d'accueil du bibliothécaire.
+INFO 2025-01-29 10:05:30,637 basehttp "GET /bibliothecaire/ HTTP/1.1" 200 1131
+INFO 2025-01-29 10:05:34,562 basehttp "GET /bibliothecaire/creer_emprunt/ HTTP/1.1" 200 1813
+INFO 2025-01-29 10:09:13,464 views Accès à la page d'accueil du bibliothécaire.
+INFO 2025-01-29 10:09:13,467 basehttp "GET /bibliothecaire/ HTTP/1.1" 200 1131
+INFO 2025-01-29 10:09:15,144 basehttp "GET /bibliothecaire/retour_emprunt/ HTTP/1.1" 200 787
+INFO 2025-01-29 10:09:47,727 basehttp "POST /bibliothecaire/retour_emprunt/ HTTP/1.1" 302 0
+INFO 2025-01-29 10:09:47,784 basehttp "GET /bibliothecaire/retour_emprunt/?borrower_id=2 HTTP/1.1" 200 898
+INFO 2025-01-29 10:13:42,528 basehttp "GET /bibliothecaire/retour_emprunt/?borrower_id=2&loan_id=1 HTTP/1.1" 200 1375
